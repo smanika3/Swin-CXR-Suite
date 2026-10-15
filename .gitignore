@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Checkpoints and logs
+checkpoints/
+checkpoints_*/
+work_dirs/
+logs/
+*.pth
+*.pth.tar
+*.tar
+
+# Predictions and raw dumps
+preds_epoch_*.json
+evaluation_results/
+visualizations/
+analysis_results/
+
+# Data and large masks
+**/data/*
+!**/data/*.py
+masks/
+annotations/
+*.png
+!**/assets/*.png
+
+# OS and IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
