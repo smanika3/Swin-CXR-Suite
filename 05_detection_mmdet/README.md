@@ -2,7 +2,7 @@
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![MMDetection](https://img.shields.io/badge/MMDetection-3.0+-blue.svg)](https://github.com/open-mmlab/mmdetection)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 
 An open-source deep learning framework for **automated pulmonary tuberculosis (TB) detection and bounding box localization** on chest radiographs (CXRs), built on top of the OpenMMLab **MMDetection** suite with a **Swin Transformer** hierarchical backbone.
 

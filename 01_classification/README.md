@@ -17,6 +17,23 @@ Multi-label classification of 14 chest radiographic observations on the **Stanfo
 
 ---
 
+## Results
+
+Swin-B (ImageNet-1K), U-Ignore, BCE + AdamW, 18 epochs. Best checkpoint: epoch 2, mean 5-class test AUC **0.9004** (CheXpert paper U-Ignore: 0.8892).
+
+| Atelectasis | Cardiomegaly | Consolidation | Edema | Pleural Effusion | Mean |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 0.8606 | 0.8697 | 0.8987 | 0.9165 | 0.9566 | **0.9004** |
+
+<p align="center">
+  <img src="../results/images/figures/exp1_auroc_per_epoch.jpg" width="48%" alt="Per-class AUROC per epoch" />
+  <img src="../results/images/figures/exp1_loss_curve.jpg" width="48%" alt="Training and validation loss" />
+</p>
+
+Per-epoch tables, paper/leaderboard comparison and slides: [`../results/README.md#1-swin-transformer-on-chexpert`](../results/README.md#1-swin-transformer-on-chexpert).
+
+---
+
 ## Directory Layout
 
 ```

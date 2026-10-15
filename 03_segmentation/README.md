@@ -2,7 +2,7 @@
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![Vision Transformer](https://img.shields.io/badge/Architecture-Swin--Unet--V2-blue.svg)](https://github.com/HuCaoFighting/Swin-Unet)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 
 An end-to-end deep learning framework for **pixel-level multi-organ anatomical semantic segmentation** on chest radiographs (CXRs), trained on the **CheXmask** database using **Swin-Unet-V2**.
 
@@ -22,14 +22,17 @@ Accurate boundary segmentation of cardiothoracic structures is fundamental for a
 
 ## Quantitative Results & Training Dynamics
 
-The model demonstrates steady convergence with high overlap fidelity across both lungs and cardiac contours:
+Best checkpoint: epoch 11 of 11, CheXmask test set (55,978 images).
 
-| Anatomical Structure | Validation Dice Coefficient |
+| Anatomical Structure | Test Dice Coefficient |
 | :--- | :--- |
-| **Right Lung** | ~0.96+ |
-| **Left Lung** | ~0.95+ |
-| **Heart** | ~0.90+ |
-| **Mean Organ Dice** | **~0.94+** |
+| **Background** | 0.9854 |
+| **Right Lung** | 0.9616 |
+| **Left Lung** | 0.9512 |
+| **Heart** | 0.9494 |
+| **Mean Dice** | **0.9619** |
+
+Per-epoch Dice and loss tables, best/worst test cases and the setup are in [`../results/README.md#3-swin-u-net-v2-on-chexmask`](../results/README.md#3-swin-u-net-v2-on-chexmask).
 
 <p align="center">
   <img src="assets/dice_vs_epoch.png" width="45%" alt="Validation Dice vs Epoch" />

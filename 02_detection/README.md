@@ -2,7 +2,7 @@
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![Vision Transformer](https://img.shields.io/badge/Backbone-Swin--Base-blue.svg)](https://github.com/microsoft/Swin-Transformer)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 
 A standalone, pure **PyTorch and Torchvision** implementation of Faster R-CNN with a hierarchical **Swin Transformer Feature Pyramid Network (FPN)** for automated pulmonary tuberculosis detection and bounding box localization on the **TBX11K** benchmark.
 

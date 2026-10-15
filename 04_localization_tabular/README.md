@@ -2,7 +2,7 @@
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![Vision Transformer](https://img.shields.io/badge/Backbone-Swin--Base-blue.svg)](https://github.com/microsoft/Swin-Transformer)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 
 An accessible, self-contained deep learning pipeline for **pulmonary tuberculosis bounding box localization and lesion subtyping** on the **TBX11K** benchmark, featuring **stratified 4-category dataset splitting** and **class-agnostic lesion detection evaluation**.
 
@@ -17,6 +17,27 @@ An accessible, self-contained deep learning pipeline for **pulmonary tuberculosi
    * **`Latent_TB`**: Manifests exclusively obsolete / latent tuberculosis calcifications.
    * **`Mixed_TB`**: Complex presentations containing *both* active and obsolete lesions in the same patient.
 3. **Comprehensive Metric Suite**: Computes standard AP50 and AP75, alongside **class-agnostic TB detection** (measuring the model's ability to localize any TB abnormality regardless of exact sub-classification).
+
+---
+
+## Results
+
+Faster R-CNN, Swin-B + FPN, 512×512, AdamW, 16 epochs, custom stratified split (train 4,622 · val 1,800 · test 1,977).
+
+| Epoch | AP50 agnostic | AP50 Active | AP50 Latent | AP75 agnostic | FROC |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 6 (best AP50) | **0.6622** | **0.6241** | 0.0763 | 0.1059 | 0.4991 |
+| 11 (best FROC) | 0.6449 | 0.6114 | **0.1410** | 0.1239 | **0.5930** |
+| 15 (best AP75) | 0.6332 | 0.6016 | 0.1249 | **0.1905** | 0.5817 |
+
+Active TB is detected well; Latent TB (73 training images) stays weak.
+
+<p align="center">
+  <img src="../results/images/figures/exp2_froc_curve_epoch11.jpg" width="48%" alt="FROC curve at epoch 11" />
+  <img src="../results/images/figures/exp2_ap50_vs_epoch.jpg" width="48%" alt="AP50 per epoch" />
+</p>
+
+Loss, AP75, FROC-per-epoch, leaderboard reference and slides: [`../results/README.md#2-swin--faster-r-cnn-on-tbx11k`](../results/README.md#2-swin--faster-r-cnn-on-tbx11k).
 
 ---
 

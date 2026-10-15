@@ -86,31 +86,30 @@ The repository is modularized into dedicated sub-projects, each with its own sel
 
 ## Benchmark Performance Summary
 
-> *Note: Quantitative tables below represent our core validation results. Detailed checkpoint metrics and logs can be reviewed in each module.*
+Best checkpoint of each experiment. Full results (every curve, per-epoch table, slide and qualitative case) are in **[`results/`](./results/README.md)**, with every table also as CSV in [`results/tables/`](./results/tables).
 
-### Classification Performance (CheXpert Validation Set)
-| Pathology | Baseline Swin AUROC | Uncertainty-Guided AUROC | LibAUC Fine-Tuned AUROC |
+| Experiment | Module | Model | Best result |
 | :--- | :--- | :--- | :--- |
-| **Atelectasis** | *Pending / Custom* | *Pending / Custom* | *Pending / Custom* |
-| **Cardiomegaly** | *Pending / Custom* | *Pending / Custom* | *Pending / Custom* |
-| **Consolidation** | *Pending / Custom* | *Pending / Custom* | *Pending / Custom* |
-| **Edema** | *Pending / Custom* | *Pending / Custom* | *Pending / Custom* |
-| **Pleural Effusion** | *Pending / Custom* | *Pending / Custom* | *Pending / Custom* |
-| **Leaderboard Mean** | **-** | **-** | **-** |
+| CheXpert classification | [`01_classification`](./01_classification) | Swin-B (ImageNet-1K), U-Ignore | Mean 5-class test AUC **0.9004** (epoch 2) |
+| TBX11K TB detection | [`04_localization_tabular`](./04_localization_tabular) | Faster R-CNN, Swin-B + FPN | FROC score **0.5930** (epoch 11); AP50 agnostic **0.6622** (epoch 6) |
+| CheXmask segmentation | [`03_segmentation`](./03_segmentation) | Swin-Unet-V2 | Mean test Dice **0.9619** (epoch 11) |
 
-### Lesion Detection Performance (TBX11K Test Set)
-| Method | Backbone | mAP@[.5:.95] | AP50 | AP75 | FROC Score (0.5–8 FPPI) |
+### Classification (CheXpert test set, epoch 2)
+| Atelectasis | Cardiomegaly | Consolidation | Edema | Pleural Effusion | Mean |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Native Faster R-CNN (`02_detection`)** | Swin-Base FPN | *Pending* | *Pending* | *Pending* | *Pending* |
-| **Stratified Pipeline (`04_localization`)** | Swin-FPN | *Pending* | *Pending* | *Pending* | *Pending* |
+| 0.8606 | 0.8697 | 0.8987 | 0.9165 | 0.9566 | **0.9004** |
 
-### Semantic Segmentation Performance (CheXmask Test Set)
-| Anatomical Structure | Dice Similarity Coefficient (DSC) | IoU / Jaccard Index |
-| :--- | :--- | :--- |
-| **Right Lung** | ~0.96+ | ~0.92+ |
-| **Left Lung** | ~0.95+ | ~0.91+ |
-| **Heart** | ~0.90+ | ~0.83+ |
-| **Mean Organ Average** | **~0.94+** | **~0.89+** |
+### Lesion Detection (TBX11K, custom stratified test split)
+| Epoch | AP50 agnostic | AP50 Active | AP50 Latent | AP75 agnostic | AP75 Active | AP75 Latent | FROC |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 6 (best AP50) | **0.6622** | **0.6241** | 0.0763 | 0.1059 | 0.0902 | 0.0025 | 0.4991 |
+| 11 (best FROC) | 0.6449 | 0.6114 | **0.1410** | 0.1239 | 0.1095 | 0.0095 | **0.5930** |
+| 15 (best AP75) | 0.6332 | 0.6016 | 0.1249 | **0.1905** | **0.1754** | **0.0367** | 0.5817 |
+
+### Semantic Segmentation (CheXmask test set, epoch 11)
+| Background | Right Lung | Left Lung | Heart | Mean Dice |
+| :--- | :--- | :--- | :--- | :--- |
+| 0.9854 | 0.9616 | 0.9512 | 0.9494 | **0.9619** |
 
 ---
 

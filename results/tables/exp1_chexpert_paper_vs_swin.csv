@@ -1,0 +1,3 @@
+Method / epoch,Atelectasis,Cardiomegaly,Consolidation,Edema,Pleural Effusion,Mean AUC
+"U-Ignore (paper, validation AUC)",0.818,0.828,0.938,0.934,0.928,0.8892
+"Swin, epoch 2 (test AUC)",0.8606,0.8697,0.8987,0.9165,0.9566,0.9004

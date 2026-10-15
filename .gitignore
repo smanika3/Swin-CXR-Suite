@@ -31,3 +31,4 @@ annotations/
 Thumbs.db
 .vscode/
 .idea/
+!results/**/*.png

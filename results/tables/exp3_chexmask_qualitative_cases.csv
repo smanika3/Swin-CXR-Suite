@@ -1,0 +1,7 @@
+Case,Right lung Dice,Left lung Dice,Heart Dice,Mean Dice,Note
+Best #1,0.989,0.987,0.989,,
+Best #2,0.987,0.985,0.991,,
+Best #3,0.986,0.988,0.986,,
+Worst #28,0.888,0.68,0.789,0.786,patient 41538
+Worst #29,0.74,0.837,0.784,0.787,patient 08840
+Worst #30,0.629,0.863,0.875,0.789,patient 14988
