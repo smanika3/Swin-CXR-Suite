@@ -76,6 +76,14 @@ def main():
         collate_fn=detection_collate_fn,
         pin_memory=True if "cuda" in args.device else False
     )
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=args.num_workers,
+        collate_fn=detection_collate_fn,
+        pin_memory=True if "cuda" in args.device else False
+    )
 
     # 3 classes: Background (0), Active TB (1), Latent TB (2)
     model = build_faster_rcnn(num_classes=3, img_size=args.img_size)
@@ -113,14 +121,29 @@ def main():
             pbar.set_postfix({"loss": f"{losses.item():.4f}"})
 
         epoch_loss = running_loss / max(1, len(train_loader))
-        print(f"Epoch {epoch} finished. Loss: {epoch_loss:.4f}")
+
+        # Validation loss. In eval() mode Faster R-CNN returns detections, not losses,
+        # so (as in the original run) the model is put in train() mode under no_grad.
+        model.eval()
+        val_running_loss = 0.0
+        with torch.no_grad():
+            for images, targets in val_loader:
+                images = [img.to(args.device) for img in images]
+                targets = [{k: v.to(args.device) for k, v in t.items()} for t in targets]
+                model.train()
+                loss_dict = model(images, targets)
+                model.eval()
+                val_running_loss += sum(loss for loss in loss_dict.values()).item()
+        val_loss = val_running_loss / max(1, len(val_loader))
+        print(f"Epoch {epoch} finished. Train loss: {epoch_loss:.4f} | Val loss: {val_loss:.4f}")
 
         ckpt_path = os.path.join(args.checkpoint_dir, f"checkpoint_epoch_{epoch}.pth")
         torch.save({
             "epoch": epoch,
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
-            "loss": epoch_loss
+            "train_loss": epoch_loss,
+            "val_loss": val_loss
         }, ckpt_path)
 
 

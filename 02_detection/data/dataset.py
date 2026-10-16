@@ -5,6 +5,7 @@ Dataset loader for TBX11K using simplified tabular CSV annotations and split tex
 
 import os
 import ast
+import warnings
 from typing import Optional, Callable
 from PIL import Image
 import pandas as pd
@@ -56,26 +57,25 @@ class TBX11KDetectionDataset(Dataset):
 
         boxes, labels = [], []
         for _, row in ann_rows.iterrows():
-            bbox_str = str(row['bbox']).strip()
-            if bbox_str != 'none' and bbox_str != '' and bbox_str != 'nan':
+            if row['bbox'] != 'none':
                 try:
-                    bbox = ast.literal_eval(bbox_str)
-                    x1 = float(bbox['xmin'])
-                    y1 = float(bbox['ymin'])
-                    x2 = x1 + float(bbox['width'])
-                    y2 = y1 + float(bbox['height'])
-
-                    if (x2 - x1) > 0 and (y2 - y1) > 0:
-                        boxes.append([x1, y1, x2, y2])
-                        tb_type = str(row['tb_type']).lower()
-                        if 'active' in tb_type:
-                            labels.append(1)  # Class 1: Active TB
-                        elif 'latent' in tb_type or 'obsolete' in tb_type:
-                            labels.append(2)  # Class 2: Latent TB
-                        else:
-                            labels.append(0)
-                except Exception:
+                    bbox = ast.literal_eval(row['bbox'])
+                    box = [
+                        bbox['xmin'],
+                        bbox['ymin'],
+                        bbox['xmin'] + bbox['width'],
+                        bbox['ymin'] + bbox['height']
+                    ]
+                except Exception as e:
+                    warnings.warn(f"{fname}: could not parse bbox {row['bbox']!r} ({e}); skipping this box")
                     continue
+                boxes.append(box)
+                if row['tb_type'] == 'active_tb':
+                    labels.append(1)  # Class 1: Active TB
+                elif row['tb_type'] == 'latent_tb':
+                    labels.append(2)  # Class 2: Latent TB
+                else:
+                    labels.append(0)
 
         target = {
             'boxes': torch.tensor(boxes, dtype=torch.float32) if boxes else torch.zeros((0, 4), dtype=torch.float32),

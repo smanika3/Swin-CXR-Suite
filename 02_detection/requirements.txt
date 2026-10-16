@@ -1,6 +1,6 @@
 torch>=2.0.0
 torchvision>=0.15.0
-timm>=0.9.0
+timm>=0.9.6  # 0.9.0-0.9.5 fail with img_size=512 on window-7 Swin
 pandas>=1.5.0
 numpy>=1.22.0
 Pillow>=9.0.0

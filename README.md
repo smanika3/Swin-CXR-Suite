@@ -56,7 +56,7 @@ The repository is modularized into dedicated sub-projects, each with its own sel
 
 | Directory | Task | Target Classes | Architecture | Highlights |
 | :--- | :--- | :--- | :--- | :--- |
-| **[`01_classification/`](./01_classification)** | Multi-Label Thoracic Pathology | 14 CheXpert Labels (5 Leaderboard) | Swin-Base (`224x224`) | U-Ones/U-Zeros policies, LibAUC surrogate AUROC loss, pseudo-label distillation |
+| **[`01_classification/`](./01_classification)** | Multi-Label Thoracic Pathology | 14 CheXpert Labels (5 Leaderboard) | Swin-Base (`224x224`) | Per-class uncertainty policies (reported run), teacher–student self-training, LibAUC fine-tuning script (does not run as written) |
 | **[`02_detection/`](./02_detection)** | Tuberculosis Lesion Detection | Active TB, Latent TB | Swin-Base + FPN + Faster R-CNN (`512x512`) | Stratified 4-category split (`No_TB`, `Active`, `Latent`, `Mixed`), class-specific & class-agnostic AP, FROC |
 | **[`03_segmentation/`](./03_segmentation)** | Anatomical Multi-Organ Segmentation | Right Lung, Left Lung, Heart | Swin-Unet-V2 | Multi-process RLE mask decoder, per-organ Dice tracking, failure case auditing |
 
@@ -67,18 +67,18 @@ The repository is modularized into dedicated sub-projects, each with its own sel
 <table>
 <tr>
 <td align="center" width="33%"><b>CheXpert Classification</b><br><sub>Swin-B · 5 leaderboard pathologies</sub><br><br><font size="6"><b>0.9004</b></font><br>mean test AUC</td>
-<td align="center" width="33%"><b>TBX11K TB Detection</b><br><sub>Faster R-CNN · Swin-B + FPN</sub><br><br><font size="6"><b>0.5930</b></font><br>FROC score · AP50 <b>0.6622</b></td>
+<td align="center" width="33%"><b>TBX11K TB Detection</b><br><sub>Faster R-CNN · Swin-B + FPN</sub><br><br><font size="6"><b>0.5930</b></font><br>FROC score (epoch 11) · AP50 <b>0.6622</b> (epoch 6)</td>
 <td align="center" width="33%"><b>CheXmask Segmentation</b><br><sub>Swin-Unet-V2 · lungs + heart</sub><br><br><font size="6"><b>0.9619</b></font><br>mean test Dice</td>
 </tr>
 </table>
 
 **Key findings**
-- **Beats the CheXpert paper baseline:** mean AUC 0.9004 vs 0.8892 for the paper's U-Ignore model (+0.011), higher on 3 of 5 pathologies.
+- **Beats the CheXpert paper baseline:** mean AUC 0.9004 vs 0.8892 for the paper's U-Ignore model (+0.011), higher on 3 of 5 pathologies. Our run used U-Ignore for 12 of 14 classes (U-Ones for Cardiomegaly, U-Zeros for Pleural Effusion).
 - **Peak AUC came early:** best epoch was epoch 2; later epochs stayed between about 0.873 and 0.892.
 - **Strong Active TB detection:** AP50 0.6241 (category-agnostic 0.6622), above the TBX11K leaderboard reference row (Active 62.41 vs 54.76 %, agnostic 66.22 vs 61.74 %); indicative only, custom split.
-- **Latent TB is the open problem:** AP50 at most 0.14, with only 73 training images vs 332 for Active TB.
-- **Near-perfect organ masks:** Dice 0.9616 right lung, 0.9512 left lung, 0.9494 heart. Dice rose every epoch of the 11-epoch run.
-- **Graceful failure:** even the worst test cases (tilted patients, implanted devices) keep a mean Dice of about 0.79.
+- **Latent TB is the open problem:** AP50 between 0.004 and 0.18 across epochs, with only 73 training images vs 332 for Active TB.
+- **Near-perfect organ masks:** Dice 0.9616 right lung, 0.9512 left lung, 0.9494 heart. Mean Dice rose every epoch of the 11-epoch run.
+- **Failure cases are unusual inputs:** the lowest-scoring test images are blank, noise-filled or non-chest views (lowest organ-mean Dice 0.42); typical hard cases (tilted patients, implanted devices) score about 0.79.
 
 Every curve, per-epoch table (also as CSV), slide and qualitative case is in each module's `results/` folder:
 [`01_classification/results`](./01_classification/results/README.md) · [`02_detection/results`](./02_detection/results/README.md) · [`03_segmentation/results`](./03_segmentation/results/README.md)
@@ -94,7 +94,7 @@ Every curve, per-epoch table (also as CSV), slide and qualitative case is in eac
 | 0.8606 | 0.8697 | 0.8987 | 0.9165 | 0.9566 | **0.9004** |
 | *0.818* | *0.828* | *0.938* | *0.934* | *0.928* | *0.8892* |
 
-<sub>Row 1: Swin-B, epoch 2, test set. Row 2 (italic): CheXpert paper U-Ignore, validation set, so the comparison is indicative only.</sub>
+<sub>Row 1: Swin-B, epoch 2, test set (best epoch chosen on test AUC). Row 2 (italic): CheXpert paper U-Ignore, validation set, so the comparison is indicative only.</sub>
 
 <p align="center">
   <img src="01_classification/results/figures/exp1_auroc_per_epoch.jpg" width="49%" alt="Per-class AUROC per epoch" />
@@ -130,13 +130,13 @@ Every curve, per-epoch table (also as CSV), slide and qualitative case is in eac
 </p>
 
 <table>
-<tr><th>Best 3 test cases (Dice 0.985–0.991)</th><th>Worst 3 test cases (mean Dice ≈ 0.79)</th></tr>
+<tr><th>Best 3 test cases (Dice 0.985–0.991)</th><th>Low-scoring cases #28–#30 of the bottom 30 (organ-mean Dice ≈ 0.79)</th></tr>
 <tr>
 <td><img src="03_segmentation/results/figures/exp3_best_cases.jpg" alt="Best segmentation cases" /></td>
 <td><img src="03_segmentation/results/figures/exp3_worst_cases.jpg" alt="Worst segmentation cases" /></td>
 </tr>
 </table>
-<sub>Columns: original, ground truth, prediction. Red = right lung, green = left lung, blue = heart.</sub>
+<sub>Columns: original, ground truth, prediction. Red = right lung, green = left lung, blue = heart. The three lowest-scoring test images (blank, noise-filled or non-chest inputs) are shown in <a href="03_segmentation/assets/best_worst_predictions_epoch_11.png">this figure</a>.</sub>
 
 ---
 
@@ -150,7 +150,7 @@ cd Swin-CXR-Suite
 
 ### 2. Create Environment
 ```bash
-conda create -n swin_cxr python=3.9 -y
+conda create -n swin_cxr python=3.10 -y
 conda activate swin_cxr
 
 # Install PyTorch matching your CUDA runtime (example CUDA 11.8):
@@ -164,21 +164,29 @@ pip install -r requirements.txt
 
 ## Quick Execution Guide
 
-Each module can be executed independently from root or from within its subdirectory:
+Each module is self-contained; run its commands from inside its folder. Each module README has the dataset download, the full pipeline and the exact settings of the reported run.
 
 ```bash
-# 1. Run CheXpert multi-label classification training
-python 01_classification/train_baseline.py --data-dir /path/to/chexpert
+# 1. CheXpert classification, reported run (edit the paths at the top of both files first)
+cd 01_classification/exp1_policy_training
+python v2_train_swin.py
+python multi_test.py
+#    Other training methods (baseline, policy mapping, self-training): see 01_classification/README.md
 
-# 2. Run TBX11K Swin-FPN Faster R-CNN detection training
-python 02_detection/train.py --data-dir /path/to/tbx11k-simplified
+# 2. TBX11K detection: split, train, evaluate (AP + FROC)
+cd 02_detection
+python data/split_dataset.py --csv-path /path/to/tbx11k-simplified/data.csv --output-dir /path/to/tbx11k-simplified
+python train.py --data-dir /path/to/tbx11k-simplified --epochs 30 --batch-size 8 --lr 1e-4
+python evaluate.py --data-dir /path/to/tbx11k-simplified --checkpoint ./checkpoints/checkpoint_epoch_11.pth --split test
 
-# 3. Run CheXmask Swin-Unet segmentation training
-python 03_segmentation/train.py \
-    --img-dir /path/to/chexpert \
-    --mask-dir /path/to/chexmask-masks \
-    --train-list /path/to/train_files.txt \
-    --val-list /path/to/val_files.txt
+# 3. CheXmask segmentation: masks, 70/30 split, train, evaluate
+cd 03_segmentation
+python data/prep_mask.py --csv-path $CHEXMASK_CSV --train-img-dir $CHEXPERT/train --val-img-dir $CHEXPERT/valid --output-dir $MASKS --min-rca 0.7
+python data/split_train_test.py --input $MASKS/train_files.txt --train-out $MASKS/train_split.txt --test-out $MASKS/test_files.txt
+python train.py --img-dir $CHEXPERT/train --mask-dir $MASKS/train --train-list $MASKS/train_split.txt \
+    --val-img-dir $CHEXPERT/valid --val-mask-dir $MASKS/valid --val-list $MASKS/valid_files.txt --epochs 11 --batch-size 96
+python evaluate.py --img-dir $CHEXPERT/train --mask-dir $MASKS/train --test-list $MASKS/test_files.txt \
+    --checkpoint ./checkpoints/checkpoint_epoch_11.pth
 ```
 
 ---
@@ -192,11 +200,12 @@ Swin-CXR-Suite/
 ├── .gitignore                     # Git tracking exclusions
 │
 ├── 01_classification/             # CheXpert multi-label Vision Transformer
+│   ├── exp1_policy_training/      # Reported run: per-class policy training + per-epoch test evaluation
 │   ├── self_training/             # Teacher-Student pseudo-labeling distillation
-│   ├── train_baseline.py          # Supervised Swin-B training
-│   ├── train_uncertainty.py       # Clinical uncertainty policies
-│   ├── finetune_libauc.py         # Direct AUROC surrogate optimization
-│   ├── evaluate.py                # Multi-label AUROC evaluator
+│   ├── train_baseline.py          # Plain supervised Swin-B baseline (CLI)
+│   ├── train_uncertainty.py       # Per-class uncertainty policy mapping (CLI)
+│   ├── finetune_libauc.py         # LibAUC AUROC fine-tuning (does not run as written)
+│   ├── evaluate.py                # AUROC of one checkpoint on valid.csv
 │   └── results/                   # CheXpert figures, slides, CSV tables
 │
 ├── 02_detection/                  # TBX11K Swin-FPN Faster R-CNN detection
@@ -209,9 +218,9 @@ Swin-CXR-Suite/
 │
 ├── 03_segmentation/               # CheXmask multi-organ semantic segmentation
 │   ├── models/                    # Swin-Unet-V2 architecture definitions
-│   ├── data/                      # High-throughput RLE mask decoding tool
+│   ├── data/                      # RLE mask decoding (RCA filter) and 70/30 split
 │   ├── analysis/                  # Failure mode and worst-case auditor
-│   ├── train.py                   # Dice & CrossEntropy segmentation loop
+│   ├── train.py                   # CrossEntropy training loop, Dice metric
 │   ├── evaluate.py                # Organ-wise Dice score evaluation
 │   └── results/                   # CheXmask figures, slides, CSV tables
 │

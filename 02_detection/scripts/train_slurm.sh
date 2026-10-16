@@ -1,4 +1,8 @@
 #!/bin/bash
+# ASU Sol-specific SLURM script (partition/qos, module names and the conda env
+# name `swin_pytorch_env` are for Sol; adapt them for other clusters).
+# Submit from inside 02_detection/ after creating the log directory:
+#   cd 02_detection && mkdir -p logs && sbatch scripts/train_slurm.sh
 #SBATCH --job-name=TBX_Localize_Swin
 #SBATCH --partition=gpu
 #SBATCH --qos=public
@@ -8,6 +12,8 @@
 #SBATCH --time=24:00:00
 #SBATCH --output=logs/train_%j.out
 #SBATCH --error=logs/train_%j.err
+
+cd "$SLURM_SUBMIT_DIR"
 
 echo "=== Starting TBX11K Swin Localization Training ==="
 date

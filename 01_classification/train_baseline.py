@@ -45,6 +45,9 @@ class CheXpertDataset(Dataset):
 
     def __getitem__(self, idx: int):
         row = self.df.iloc[idx]
+        # PATH NOTE: CSV 'Path' values look like 'CheXpert-v1.0/train/patientX/...'; this prefix is stripped
+        # and the rest is joined to the image root. If your download uses another prefix
+        # (e.g. 'CheXpert-v1.0-small/train/'), change it here.
         prefix = 'CheXpert-v1.0/train/' if self.is_train else 'CheXpert-v1.0/valid/'
         rel_path = row["Path"].replace(prefix, '', 1)
         img_path = os.path.join(self.img_base, rel_path)

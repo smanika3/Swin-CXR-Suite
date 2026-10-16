@@ -14,7 +14,7 @@ Folder layout: `slides/` full slides (PNG) · `figures/` original graphs/images 
 | Item | Value |
 |---|---|
 | Task | Object detection (localisation) of tuberculosis lesions in chest X-rays; images fall in 4 categories: No_TB, Active_TB, Latent_TB, Mixed_TB |
-| Split | Stratified split; minimum quotas for rare classes in the test set (at least 20 Latent_TB and 5 Mixed_TB). Train 4,622 · Val 1,800 · Test 1,977 |
+| Split | Stratified split; minimum quotas for rare classes in the test set (at least 20 Latent_TB and 5 Mixed_TB). Train 4,622 · Val 1,800 · Test 1,977. Val is the official TBX11K validation set; train and test are split from the official training set, which is what the category table below counts |
 | Model | Faster R-CNN, Swin Base backbone (ImageNet pretrained, features from stages 1–3), FPN with 256 output channels |
 | RPN | Anchor sizes 32/64/128/256 px; aspect ratios 0.5/1.0/2.0 |
 | Heads / input | 3 classes (background, Active TB, Latent TB); images resized to 512×512 |

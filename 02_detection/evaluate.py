@@ -171,7 +171,7 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=8, shuffle=False, num_workers=4, collate_fn=detection_collate_fn)
 
     print(f"Loading checkpoint: {args.checkpoint}")
-    model = build_faster_rcnn(num_classes=3, img_size=args.img_size)
+    model = build_faster_rcnn(num_classes=3, img_size=args.img_size, pretrained=False)  # weights come from the checkpoint
     ckpt = torch.load(args.checkpoint, map_location=args.device)
     model.load_state_dict(ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt)
     model.to(args.device)

@@ -16,15 +16,16 @@ Folder layout: `slides/` full slides (PNG) · `figures/` original graphs/images 
 | Task | Multi-label classification of all 14 CheXpert pathologies; mean and per-class AUC reported on the 5 leaderboard pathologies (Atelectasis, Cardiomegaly, Consolidation, Edema, Pleural Effusion) |
 | Data | Train 223,414 · validation 234 · test 668 |
 | Model | Swin Transformer Base (`swin_base_patch4_window7_224`), ImageNet-1K pretrained, 224×224 input, 14 output logits |
-| Training | BCEWithLogitsLoss · AdamW (weight decay 0.1) · learning rate 1e-4 · 18 epochs, best epoch picked by AUC |
-| Uncertain labels | U-Ignore (uncertain labels ignored) |
+| Training | BCEWithLogitsLoss · AdamW (weight decay 0.1) · learning rate 1e-4 · 18 epochs, best epoch picked by AUC on the 668-image test set (every epoch's checkpoint was scored on it) |
+| Uncertain labels | Per class: Cardiomegaly U-Ones (`-1 → 1`), Pleural Effusion U-Zeros (`-1 → 0`), all other classes U-Ignore (masked out of the loss) |
 | Best result | Mean 5-class test AUC **0.9004** at epoch 2 |
 
 Slide images: [task & dataset](slides/slide015_exp1_setup_task_dataset.png) · [model & training](slides/slide016_exp1_setup_model_training.png)
 
 **Summary.** The model hit its best mean leaderboard AUC (0.9004) at epoch 2, then stayed between about 0.873 and 0.892 for the remaining
 16 epochs. Pleural Effusion is the easiest class (0.945–0.963); Atelectasis is the hardest and least stable (0.794–0.868). Against the
-original CheXpert paper's U-Ignore numbers, Swin is higher on mean AUC (+0.011) and on 3 of 5 classes.
+original CheXpert paper's U-Ignore numbers, Swin is higher on mean AUC (+0.011) and on 3 of 5 classes. The run used U-Ignore for
+12 of 14 classes but U-Ones / U-Zeros for Cardiomegaly / Pleural Effusion, so this is not a pure U-Ignore comparison.
 
 ## 1.1 Training and validation loss (slide 17)
 
@@ -118,6 +119,13 @@ Leaderboard rows shown on the slide for reference: top entry *DeepAUC-v1 ensembl
 - The paper is higher on Consolidation (0.938 vs 0.8987) and Edema (0.934 vs 0.9165).
 - The leaderboard entries (0.930, 0.911) are still above 0.9004.
 - *Caveat:* the slide compares the paper's **validation** AUC with Swin's **test** AUC, so the comparison is indicative, not like-for-like.
+
+---
+
+**Corrections to the original write-up.** Checked against the training code that produced these numbers
+([`../exp1_policy_training/`](../exp1_policy_training)). No numbers were changed.
+- Uncertain labels: the slides say U-Ignore; the code uses U-Ones for Cardiomegaly, U-Zeros for Pleural Effusion and U-Ignore (masking) for the other 12 classes.
+- Epoch selection: the best epoch was chosen on test-set AUC, not on a separate validation set.
 
 ---
 

@@ -14,17 +14,18 @@ Folder layout: `slides/` full slides (PNG) · `figures/` original graphs/images 
 | Item | Value |
 |---|---|
 | Task | 4-class segmentation: background, right lung, left lung, heart |
-| Data | CheXmask annotations on the CheXpert train set (~186,592 images; masks filtered with RCA for quality). Custom patient-independent 70/30 split (scikit-learn, `random_state=42`): train 130,614 · test 55,978. Validation: 199 images from the original CheXpert validation set |
-| Preprocessing | RLE-compressed masks decoded to PNG at 224×224; grayscale X-rays resized to 224×224 |
+| Data | CheXmask annotations on the CheXpert train set (~186,592 images; masks kept only if CheXmask `Dice RCA (Mean)` ≥ 0.7). Custom image-level 70/30 split (scikit-learn `train_test_split`, `random_state=42`; not patient-independent, so images of one patient can fall in both train and test): train 130,614 · test 55,978. Validation: 199 images from the original CheXpert validation set |
+| Preprocessing | RLE-compressed masks decoded to PNG at native resolution; X-rays (loaded as 3-channel) and masks resized to 224×224 when loaded, masks with nearest-neighbour |
 | Model | Swin Transformer U-Net V2: hierarchical Swin encoder with a U-Net-style decoder and skip connections. `img_size=224`, `num_classes=4`, `depths=[2,2,2,2]`, `depths_decoder=[1,2,2,2]`, `drop_path_rate=0.1` |
-| Training | AdamW · learning rate 1e-4 · weight decay 0.05 · CrossEntropyLoss |
+| Training | AdamW · learning rate 1e-4 · weight decay 0.05 · CrossEntropyLoss · batch 96 · 11 epochs |
 | Best result | Mean Dice **0.9619** at epoch 11 (background 0.9854, right lung 0.9616, left lung 0.9512, heart 0.9494) |
 
 Slide images: [dataset](slides/slide085_exp3_setup_dataset.png) · [preprocessing](slides/slide086_exp3_setup_preprocessing.png) · [model](slides/slide087_exp3_setup_model.png) · [training](slides/slide088_exp3_setup_training.png)
 
-**Summary.** Segmentation improved every epoch of the 11-epoch run, finishing at mean Dice 0.9619. Background is near-perfect (0.9854), then
+**Summary.** Mean Dice improved every epoch of the 11-epoch run (single classes dipped slightly at a few epochs), finishing at mean Dice 0.9619. Background is near-perfect (0.9854), then
 right lung (0.9616), with left lung (0.9512) and heart (0.9494) slightly harder. The best three test images match ground truth almost exactly
-(per-class Dice 0.985–0.991); the worst three (mean Dice about 0.79) are unusual images (my reading of the images).
+(per-class Dice 0.985–0.991). The slide's "worst" cases are ranks #28–#30 of the 30 lowest-scoring test images (organ-mean Dice about 0.79);
+the lowest-ranked image scores 0.42 (left lung 0.013), see 3.6.
 
 ## 3.1 Training and validation loss (slide 89)
 
@@ -94,7 +95,7 @@ Columns: original, ground truth, prediction. Colours: red = right lung, green = 
 - Best #1: RL 0.989, LL 0.987, H 0.989 · Best #2: 0.987 / 0.985 / 0.991 · Best #3: 0.986 / 0.988 / 0.986.
 - Predictions are visually almost identical to ground truth on clear, well-positioned X-rays.
 
-## 3.6 Qualitative results — three worst test cases (slide 94)
+## 3.6 Qualitative results — low-scoring test cases #28–#30 (slide 94)
 
 ![Exp 3 worst cases](slides/slide094_exp3_worst_cases.png)
 
@@ -111,7 +112,24 @@ Columns: original, ground truth, prediction. Colours: red = right lung, green = 
 
 CSV: [`exp3_chexmask_qualitative_cases.csv`](tables/exp3_chexmask_qualitative_cases.csv)
 
-- *Observation:* these are atypical images — a tilted patient with arm and tubes in view (#28), a heavily opacified chest with lines and devices (#29), and an implanted device over the right lung (#30). All three still reach a mean Dice near 0.79, so the model degrades on hard cases rather than failing outright. The slide itself gives no causes; these are read from the images.
+- *Observation:* these are atypical images — a tilted patient with arm and tubes in view (#28), a heavily opacified chest with lines and devices (#29), and an implanted device over the right lung (#30). The slide itself gives no causes; these are read from the images.
+- These are not the three worst images. Ranking all test images by organ-mean Dice (`worst.py`), the 30 lowest are #1–#30, and the slide shows #28–#30. The three lowest are:
+
+| Rank | Right lung Dice | Left lung Dice | Heart Dice | Organ-mean Dice |
+|---|---|---|---|---|
+| #1 | 0.6219 | 0.0127 | 0.6336 | 0.4227 |
+| #2 | 0.6545 | 0.4939 | 0.4772 | 0.5418 |
+| #3 | 0.7779 | 0.4479 | 0.7844 | 0.6700 |
+
+  They are shown as "Worst #1–#3" in [`../assets/best_worst_predictions_epoch_11.png`](../assets/best_worst_predictions_epoch_11.png): a head-and-shoulders view, a blank grey image and a noise-filled image, i.e. unusual or corrupted inputs.
+
+---
+
+**Corrections to the original write-up.** Checked against the training code that produced these numbers. No numbers were changed.
+- Split: described as patient-independent; the code splits individual images (`train_test_split` on image paths), so it is not patient-independent.
+- Mask preprocessing: masks were saved at native resolution and resized to 224×224 at load time, not decoded at 224×224.
+- RCA filter: the threshold is `Dice RCA (Mean)` ≥ 0.7.
+- Worst cases: the slide's "worst three" are ranks #28–#30 of the bottom 30; the true lowest scores are listed in 3.6.
 
 ---
 

@@ -49,7 +49,7 @@ def main():
         transform=transforms.Compose([transforms.Resize((512, 512)), transforms.ToTensor()])
     )
 
-    model = build_faster_rcnn(num_classes=3, img_size=512)
+    model = build_faster_rcnn(num_classes=3, img_size=512, pretrained=False)  # weights come from the checkpoint
     ckpt = torch.load(args.checkpoint, map_location=args.device)
     model.load_state_dict(ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt)
     model.to(args.device)

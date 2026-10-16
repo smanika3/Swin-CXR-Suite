@@ -29,6 +29,9 @@ print(f"[DEBUG] CUDA available: {torch.cuda.is_available()}, DEVICE: {DEVICE}")
 
 BATCH_SIZE = 96
 NUM_CLASSES = 14
+# EDIT BEFORE RUNNING: author's ASU Sol paths. CHECKPOINT_DIR = teacher checkpoints to load
+# (the author used the Exp 1 run, exp1_policy_training/; point it at teacher_train.py's output to use that teacher).
+# Writes OUTPUT_CSV_PATH (train_pseudolabels.csv) for student_train.py.
 CHECKPOINT_DIR = "/scratch/smanika3/feedback/v1/checkpoints"
 UNCOMPRESSED_DIR = "/scratch/smanika3/chexpert/full_uncompressed"
 TRAIN_IMAGE_BASE = os.path.join(UNCOMPRESSED_DIR, "train")
@@ -109,6 +112,9 @@ class CheXpertDatasetFiltered(Dataset):
     def __getitem__(self, idx):
         actual_idx = self.filtered_indices[idx]
         row = self.df.iloc[actual_idx]
+        # PATH NOTE: CSV 'Path' values look like 'CheXpert-v1.0/train/patientX/...'; this prefix is stripped
+        # and the rest is joined to the image root. If your download uses another prefix
+        # (e.g. 'CheXpert-v1.0-small/train/'), change it here.
         rel_path = row["Path"].replace('CheXpert-v1.0/train/', '', 1)
         img_path = os.path.join(self.img_base, rel_path)
         

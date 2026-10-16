@@ -76,7 +76,7 @@ Input CXR (512 x 512)
 ## Repository Structure
 
 ```
-tbx11k-tb-localization/
+02_detection/
 ├── models/
 │   ├── __init__.py
 │   └── swin_fpn.py           # SwinBackboneWithFPN and Faster R-CNN builder
@@ -86,12 +86,12 @@ tbx11k-tb-localization/
 │   ├── split_dataset.py      # Stratified 4-category split generator
 │   └── analyze_dataset.py    # Split and bounding-box distribution auditor
 ├── scripts/
-│   └── train_slurm.sh        # HPC batch submission script
+│   └── train_slurm.sh        # SLURM script (ASU Sol-specific)
 ├── train.py                  # Training pipeline with checkpoint resumption
 ├── evaluate.py               # AP50, AP75, class-specific & class-agnostic eval
 ├── visualize.py              # Side-by-side Ground Truth vs Prediction visualizer
+├── results/                  # Reported tables, figures and slides
 ├── requirements.txt
-├── .gitignore
 └── README.md
 ```
 
@@ -100,8 +100,8 @@ tbx11k-tb-localization/
 ## Installation
 
 ```bash
-git clone https://github.com/<your-username>/tbx11k-tb-localization.git
-cd tbx11k-tb-localization
+git clone https://github.com/smanika3/Swin-CXR-Suite.git
+cd Swin-CXR-Suite/02_detection
 
 conda create -n tb_localization python=3.9 -y
 conda activate tb_localization
@@ -109,34 +109,60 @@ conda activate tb_localization
 pip install -r requirements.txt
 ```
 
+All commands below are run from inside `02_detection/` (the scripts import the local `models/` and `data/` packages).
+
+---
+
+## Dataset
+
+We use the simplified TBX11K release from Kaggle: <https://www.kaggle.com/datasets/usmanshams/tbx-11>. Expected layout:
+```
+tbx11k-simplified/
+├── data.csv
+└── images/          # chest X-rays referenced by data.csv `fname`
+```
+
+`data.csv` has one row per bounding box (images without boxes have a single row). The code reads these columns:
+
+| Column | Content |
+| :--- | :--- |
+| `fname` | Image file name inside `images/` |
+| `bbox` | `none`, or a dict string `{'xmin': ..., 'ymin': ..., 'width': ..., 'height': ...}` in pixel coordinates of the 512×512 images |
+| `tb_type` | `active_tb`, `latent_tb`, or `none` (a box with any other value gets label 0) |
+| `source` | `train` or `val` (official TBX11K split) |
+
+Each image is assigned a category from the set of its `tb_type` values: `No_TB` (only `none`), `Active_TB` (active, no latent), `Latent_TB` (latent, no active), `Mixed_TB` (both); anything else is `Unknown`. Boxes with `tb_type` `active_tb` → class 1, `latent_tb` → class 2.
+
 ---
 
 ## Data Preparation & Stratification
 
-Ensure your dataset directory is structured as:
-```
-data_dir/
-├── data.csv
-└── images/
-    ├── img_001.png
-    └── img_002.png
-```
-
-### 1. Generate Stratified Splits
-Generate balanced `train.txt`, `val.txt`, and `test.txt` split files:
+### 1. Generate Splits
 ```bash
 python data/split_dataset.py \
-    --csv-path /path/to/data.csv \
-    --img-dir /path/to/images \
-    --output-dir /path/to/data_dir \
-    --test-size 600
+    --csv-path /path/to/tbx11k-simplified/data.csv \
+    --output-dir /path/to/tbx11k-simplified
 ```
+Writes `train.txt`, `val.txt`, `test.txt` (one image path per line, prefixed with `--img-dir`, default `<csv dir>/images`). Seed 42 (`--seed`).
+
+* **val** = all `source == val` images, i.e. the official TBX11K validation set (1,800 images).
+* **test** = carved from the `source == train` images per category: `int(0.3 × n)` images, with at least 20 `Latent_TB` and 5 `Mixed_TB`.
+* **train** = the remaining `source == train` images. `Unknown` images from `source == train` are not used.
+
+Resulting split (train 4,622 · val 1,800 · test 1,977):
+
+| Category (`source == train`) | Total | Train | Test |
+| :--- | :--- | :--- | :--- |
+| No_TB | 6,000 | 4,200 | 1,800 |
+| Active_TB | 473 | 332 | 141 |
+| Latent_TB | 103 | 73 | 30 |
+| Mixed_TB | 23 | 17 | 6 |
 
 ### 2. Verify Split Distributions
 ```bash
 python data/analyze_dataset.py \
     --csv-path /path/to/data.csv \
-    --splits-dir /path/to/data_dir
+    --splits-dir /path/to/tbx11k-simplified
 ```
 
 ---
@@ -146,7 +172,7 @@ python data/analyze_dataset.py \
 Train the Faster R-CNN detector:
 ```bash
 python train.py \
-    --data-dir /path/to/data_dir \
+    --data-dir /path/to/tbx11k-simplified \
     --checkpoint-dir ./checkpoints \
     --epochs 30 \
     --batch-size 8 \
@@ -154,7 +180,9 @@ python train.py \
     --img-size 512
 ```
 
-Optimizer: AdamW (lr 1e-4), no LR schedule. To resume from the latest saved checkpoint, append `--resume`.
+Optimizer: AdamW (lr 1e-4), no LR schedule. Train and validation loss are printed every epoch and stored in each checkpoint. To resume from the latest saved checkpoint, append `--resume`.
+
+On ASU Sol: `mkdir -p logs && sbatch scripts/train_slurm.sh` (from `02_detection/`). The script's partition/qos, modules and conda env name (`swin_pytorch_env`) are Sol-specific.
 
 ---
 
@@ -163,7 +191,7 @@ Optimizer: AdamW (lr 1e-4), no LR schedule. To resume from the latest saved chec
 Evaluate the test set across multiple IoU thresholds:
 ```bash
 python evaluate.py \
-    --data-dir /path/to/data_dir \
+    --data-dir /path/to/tbx11k-simplified \
     --checkpoint ./checkpoints/checkpoint_epoch_30.pth \
     --split test
 ```
@@ -181,7 +209,7 @@ python evaluate.py \
 Generate visual comparisons highlighting Ground Truth vs Predicted bounding boxes:
 ```bash
 python visualize.py \
-    --data-dir /path/to/data_dir \
+    --data-dir /path/to/tbx11k-simplified \
     --checkpoint ./checkpoints/checkpoint_epoch_30.pth \
     --num-samples 10 \
     --score-thresh 0.3 \

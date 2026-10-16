@@ -25,6 +25,8 @@ BATCH_SIZE = 96
 NUM_CLASSES = 14
 TOTAL_EPOCHS = 100
 EPOCHS_PER_JOB = 10
+# EDIT BEFORE RUNNING: author's ASU Sol paths. Set CHECKPOINT_DIR (teacher checkpoints)
+# and UNCOMPRESSED_DIR / CSV_BASE_PATH (CheXpert root with train/, valid/ and the CSVs).
 CHECKPOINT_DIR = "/scratch/smanika3/feedback/v2-self/checkpoints/teacher"  # Separate dir for teacher
 os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 
@@ -88,6 +90,9 @@ class CheXpertDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
+        # PATH NOTE: CSV 'Path' values look like 'CheXpert-v1.0/train/patientX/...'; this prefix is stripped
+        # and the rest is joined to the image root. If your download uses another prefix
+        # (e.g. 'CheXpert-v1.0-small/train/'), change it here.
         prefix_to_remove = 'CheXpert-v1.0/train/' if self.is_train else 'CheXpert-v1.0/valid/'
         relative_path = row["Path"].replace(prefix_to_remove, '', 1)
         img_path = os.path.join(self.img_base, relative_path)
