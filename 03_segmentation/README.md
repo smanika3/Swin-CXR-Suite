@@ -32,7 +32,7 @@ Best checkpoint: epoch 11 of 11, CheXmask test set (55,978 images).
 | **Heart** | 0.9494 |
 | **Mean Dice** | **0.9619** |
 
-Per-epoch Dice and loss tables, best/worst test cases and the setup are in [`../results/README.md#3-swin-u-net-v2-on-chexmask`](../results/README.md#3-swin-u-net-v2-on-chexmask).
+Per-epoch Dice and loss tables, best/worst test cases and the setup are in [`results/README.md`](results/README.md).
 
 <p align="center">
   <img src="assets/dice_vs_epoch.png" width="45%" alt="Validation Dice vs Epoch" />

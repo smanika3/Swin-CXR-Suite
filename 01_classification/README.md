@@ -26,11 +26,11 @@ Swin-B (ImageNet-1K), U-Ignore, BCE + AdamW, 18 epochs. Best checkpoint: epoch 2
 | 0.8606 | 0.8697 | 0.8987 | 0.9165 | 0.9566 | **0.9004** |
 
 <p align="center">
-  <img src="../results/images/figures/exp1_auroc_per_epoch.jpg" width="48%" alt="Per-class AUROC per epoch" />
-  <img src="../results/images/figures/exp1_loss_curve.jpg" width="48%" alt="Training and validation loss" />
+  <img src="results/figures/exp1_auroc_per_epoch.jpg" width="48%" alt="Per-class AUROC per epoch" />
+  <img src="results/figures/exp1_loss_curve.jpg" width="48%" alt="Training and validation loss" />
 </p>
 
-Per-epoch tables, paper/leaderboard comparison and slides: [`../results/README.md#1-swin-transformer-on-chexpert`](../results/README.md#1-swin-transformer-on-chexpert).
+Per-epoch tables, paper/leaderboard comparison and slides: [`results/README.md`](results/README.md).
 
 ---
 

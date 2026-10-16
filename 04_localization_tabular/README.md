@@ -20,27 +20,6 @@ An accessible, self-contained deep learning pipeline for **pulmonary tuberculosi
 
 ---
 
-## Results
-
-Faster R-CNN, Swin-B + FPN, 512×512, AdamW, 16 epochs, custom stratified split (train 4,622 · val 1,800 · test 1,977).
-
-| Epoch | AP50 agnostic | AP50 Active | AP50 Latent | AP75 agnostic | FROC |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| 6 (best AP50) | **0.6622** | **0.6241** | 0.0763 | 0.1059 | 0.4991 |
-| 11 (best FROC) | 0.6449 | 0.6114 | **0.1410** | 0.1239 | **0.5930** |
-| 15 (best AP75) | 0.6332 | 0.6016 | 0.1249 | **0.1905** | 0.5817 |
-
-Active TB is detected well; Latent TB (73 training images) stays weak.
-
-<p align="center">
-  <img src="../results/images/figures/exp2_froc_curve_epoch11.jpg" width="48%" alt="FROC curve at epoch 11" />
-  <img src="../results/images/figures/exp2_ap50_vs_epoch.jpg" width="48%" alt="AP50 per epoch" />
-</p>
-
-Loss, AP75, FROC-per-epoch, leaderboard reference and slides: [`../results/README.md#2-swin--faster-r-cnn-on-tbx11k`](../results/README.md#2-swin--faster-r-cnn-on-tbx11k).
-
----
-
 ## Model Architecture
 
 ```
