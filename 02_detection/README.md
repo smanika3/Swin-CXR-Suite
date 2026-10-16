@@ -1,25 +1,28 @@
-# TBX11K-Swin-Faster-RCNN: Native PyTorch Tuberculosis Lesion Detection using Swin Transformer FPN
+# TBX11K-TB-Localization: Tuberculosis Lesion Detection with Swin Transformer FPN & Stratified Splitting
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![Vision Transformer](https://img.shields.io/badge/Backbone-Swin--Base-blue.svg)](https://github.com/microsoft/Swin-Transformer)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](../LICENSE)
 
-A standalone, pure **PyTorch and Torchvision** implementation of Faster R-CNN with a hierarchical **Swin Transformer Feature Pyramid Network (FPN)** for automated pulmonary tuberculosis detection and bounding box localization on the **TBX11K** benchmark.
+An accessible, self-contained deep learning pipeline for **pulmonary tuberculosis bounding box localization and lesion subtyping** on the **TBX11K** benchmark, featuring **stratified 4-category dataset splitting** and **class-agnostic lesion detection evaluation**.
 
 ---
 
-## Why Native PyTorch?
+## Key Highlights
 
-Unlike heavy frameworks (such as MMDetection or Detectron2) which impose complex abstractions and fragile compilation chains, this repository provides:
-* **Zero Heavy Dependencies**: Built purely on core `torch`, `torchvision`, and `timm`.
-* **Complete Transparency**: Direct access to multi-scale RoI pooling, anchor generation, classification, and regression loss routines.
-* **Clinical Evaluation Suite**: In addition to standard COCO mAP, it includes native **Free-Response ROC (FROC)** calculation tailored for radiological CAD systems.
+1. **Simplified Tabular Workflow**: Directly processes tabular CSV annotations (`data.csv`) with dictionary-encoded bounding boxes, removing the requirement to convert to complex COCO/Pascal VOC formats.
+2. **Clinical Stratification Scheme**: Solves sample imbalance and lesion co-occurrence by partitioning radiographs across 4 diagnostic disease categories:
+   * **`No_TB`**: Healthy / non-tuberculous control radiographs.
+   * **`Active_TB`**: Manifests exclusively active tuberculosis lesions.
+   * **`Latent_TB`**: Manifests exclusively obsolete / latent tuberculosis calcifications.
+   * **`Mixed_TB`**: Complex presentations containing *both* active and obsolete lesions in the same patient.
+3. **Comprehensive Metric Suite**: Computes standard AP50 and AP75, alongside **class-agnostic TB detection** (measuring the model's ability to localize any TB abnormality regardless of exact sub-classification).
 
 ---
 
 ## Results
 
-Faster R-CNN, Swin-B + FPN, 512×512, AdamW, 16 epochs, custom stratified split (train 4,622 · val 1,800 · test 1,977).
+Faster R-CNN, Swin-B + FPN, 512×512, AdamW (lr 1e-4), batch 8, 16 epochs, custom stratified split (train 4,622 · val 1,800 · test 1,977).
 
 | Epoch | AP50 agnostic | AP50 Active | AP50 Latent | AP75 agnostic | FROC |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -38,33 +41,33 @@ Loss, AP75, FROC-per-epoch, leaderboard reference and slides: [`results/README.m
 
 ---
 
-## Architecture Overview
+## Model Architecture
 
 ```
-Input CXR (800 x 800)
-         │
-         ▼
+Input CXR (512 x 512)
+          │
+          ▼
 ┌────────────────────────────────────────────────────────┐
-│  Swin Transformer Backbone (timm)                      │
-│  - Stage 0: 128 channels                               │
-│  - Stage 1: 256 channels                               │
-│  - Stage 2: 512 channels                               │
-│  - Stage 3: 1024 channels                              │
+│  Swin Transformer Base (timm)                          │
+│  - Stage 1 (H/8, W/8): 256 channels                    │
+│  - Stage 2 (H/16, W/16): 512 channels                  │
+│  - Stage 3 (H/32, W/32): 1024 channels                 │
 └────────────────────────────────────────────────────────┘
-         │
-         ▼
+          │
+          ▼
 ┌────────────────────────────────────────────────────────┐
-│  FPN Lateral Projections (Conv2d 1x1 -> 256-d)         │
-│  - Multi-scale Feature Maps: ['0', '1', '2', '3']      │
+│  Feature Pyramid Network (Torchvision FPN)             │
+│  - Lateral Conv2d (256, 512, 1024 -> 256)              │
+│  - Top-Down pathway with LastLevelMaxPool              │
+│  - 4 Output scales: ['0', '1', '2', '3']               │
 └────────────────────────────────────────────────────────┘
-         │
-         ▼
+          │
+          ▼
 ┌────────────────────────────────────────────────────────┐
-│  Torchvision Faster R-CNN Heads                        │
-│  - AnchorGenerator: Sizes (32, 64, 128, 256)           │
-│  - MultiScaleRoIAlign: Output size 7x7                 │
-│  - Two-Class Classification: Active TB vs. Obsolete TB │
-│  - Smooth L1 Bounding Box Regression                   │
+│  Faster R-CNN Detection Head                           │
+│  - Anchor sizes: (32, 64, 128, 256)                    │
+│  - 3-Class Classifier: Background, Active TB, Latent TB│
+│  - Smooth L1 Box Regressor                             │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -73,20 +76,20 @@ Input CXR (800 x 800)
 ## Repository Structure
 
 ```
-tbx11k-swin-faster-rcnn/
+tbx11k-tb-localization/
 ├── models/
 │   ├── __init__.py
-│   └── swin_fpn.py            # SwinBackboneFPN and Faster R-CNN factory
-├── datasets/
+│   └── swin_fpn.py           # SwinBackboneWithFPN and Faster R-CNN builder
+├── data/
 │   ├── __init__.py
-│   └── tbx11k.py              # PyTorch Dataset & custom collate function
-├── tools/
-│   └── fix_coco_json.py       # Validates and patches COCO JSON metadata
+│   ├── dataset.py            # Tabular TBX11K Dataset & collation
+│   ├── split_dataset.py      # Stratified 4-category split generator
+│   └── analyze_dataset.py    # Split and bounding-box distribution auditor
 ├── scripts/
-│   └── train_slurm.sh         # Cluster batch submission script
-├── train.py                   # CLI training entrypoint
-├── evaluate.py                # COCO mAP and FROC evaluation script
-├── visualize.py               # Ground Truth vs. Prediction overlay tool
+│   └── train_slurm.sh        # HPC batch submission script
+├── train.py                  # Training pipeline with checkpoint resumption
+├── evaluate.py               # AP50, AP75, class-specific & class-agnostic eval
+├── visualize.py              # Side-by-side Ground Truth vs Prediction visualizer
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -97,83 +100,93 @@ tbx11k-swin-faster-rcnn/
 ## Installation
 
 ```bash
-git clone https://github.com/<your-username>/tbx11k-swin-faster-rcnn.git
-cd tbx11k-swin-faster-rcnn
+git clone https://github.com/<your-username>/tbx11k-tb-localization.git
+cd tbx11k-tb-localization
 
-conda create -n swin_frcnn python=3.9 -y
-conda activate swin_frcnn
+conda create -n tb_localization python=3.9 -y
+conda activate tb_localization
 
 pip install -r requirements.txt
 ```
 
 ---
 
-## Dataset Format
+## Data Preparation & Stratification
 
-This repository expects the **TBX11K** dataset in standard COCO format:
+Ensure your dataset directory is structured as:
 ```
 data_dir/
-├── train/
-│   └── img/
-├── val/
-│   └── img/
-└── annotations/
-    ├── train.json
-    └── val.json
+├── data.csv
+└── images/
+    ├── img_001.png
+    └── img_002.png
 ```
 
-If your annotations are missing the COCO `"info"` dictionary, run:
+### 1. Generate Stratified Splits
+Generate balanced `train.txt`, `val.txt`, and `test.txt` split files:
 ```bash
-python tools/fix_coco_json.py /path/to/annotations/*.json
+python data/split_dataset.py \
+    --csv-path /path/to/data.csv \
+    --img-dir /path/to/images \
+    --output-dir /path/to/data_dir \
+    --test-size 600
+```
+
+### 2. Verify Split Distributions
+```bash
+python data/analyze_dataset.py \
+    --csv-path /path/to/data.csv \
+    --splits-dir /path/to/data_dir
 ```
 
 ---
 
-## Usage Guide
+## Training
 
-### 1. Training
-Train the model with configurable hyperparameters:
+Train the Faster R-CNN detector:
 ```bash
 python train.py \
-    --data-dir /path/to/tbx11k \
+    --data-dir /path/to/data_dir \
     --checkpoint-dir ./checkpoints \
     --epochs 30 \
     --batch-size 8 \
-    --lr 0.005 \
-    --img-size 800
+    --lr 1e-4 \
+    --img-size 512
 ```
-To resume training from the latest saved checkpoint, simply append `--resume`.
 
-### 2. Evaluation (mAP & FROC)
-Evaluate a trained model checkpoint on the validation split:
+Optimizer: AdamW (lr 1e-4), no LR schedule. To resume from the latest saved checkpoint, append `--resume`.
+
+---
+
+## Evaluation & Metrics
+
+Evaluate the test set across multiple IoU thresholds:
 ```bash
 python evaluate.py \
-    --data-dir /path/to/tbx11k \
+    --data-dir /path/to/data_dir \
     --checkpoint ./checkpoints/checkpoint_epoch_30.pth \
-    --split val
+    --split test
 ```
-This outputs:
-* **Standard COCO metrics**: `AP@[.5:.95]`, `AP50`, `AP75`
-* **Clinical FROC metrics**: Average Sensitivity across `[0.5, 1.0, 2.0, 4.0, 8.0]` False Positives per Image (FPPI).
 
-### 3. Visual Debugging & Qualitative Inspection
-Generate comparison plots of Ground Truth (green) vs Predictions (red dashed with confidence score):
+### Output Metric Matrix
+* **Active TB AP@0.50 & AP@0.75**: Performance on cavitary, infiltrate, and active tuberculous consolidation.
+* **Latent TB AP@0.50 & AP@0.75**: Performance on calcified nodules, fibrotic bands, and apical scarring.
+* **Class-Agnostic AP**: Overall lesion localization ability independent of subtype diagnosis.
+* **FROC score**: Mean lesion sensitivity over FROC points with up to 1 false positive per image (curve swept over 50 score thresholds, FPPI capped at 2.0).
+
+---
+
+## Side-by-Side Qualitative Visualizer
+
+Generate visual comparisons highlighting Ground Truth vs Predicted bounding boxes:
 ```bash
 python visualize.py \
-    --data-dir /path/to/tbx11k \
+    --data-dir /path/to/data_dir \
     --checkpoint ./checkpoints/checkpoint_epoch_30.pth \
     --num-samples 10 \
     --score-thresh 0.3 \
     --output-dir ./visualizations
 ```
-
----
-
-## Clinical Relevance & Metrics
-
-In radiological lesion detection, precision-recall alone can be misleading due to varying disease prevalence and multiple lesions per image. This project implements:
-* **Free-Response ROC (FROC)**: Plots lesion detection sensitivity against the average number of false-positive detections per patient image.
-* **Sensitivity @ Target FPPI**: Evaluates clinically acceptable operating points (e.g., 1 to 2 false alerts per radiograph).
 
 ---
 

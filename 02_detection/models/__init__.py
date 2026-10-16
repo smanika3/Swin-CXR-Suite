@@ -1,3 +1,3 @@
-from .swin_fpn import SwinBackboneFPN, make_fasterrcnn_swin
+from .swin_fpn import SwinBackboneWithFPN, build_faster_rcnn
 
-__all__ = ['SwinBackboneFPN', 'make_fasterrcnn_swin']
+__all__ = ['SwinBackboneWithFPN', 'build_faster_rcnn']

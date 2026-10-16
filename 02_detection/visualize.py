@@ -1,32 +1,34 @@
 #!/usr/bin/env python3
 """
 visualize.py
-Visualize model predictions vs. Ground Truth bounding boxes on TBX11K chest X-rays.
+Side-by-side visualizer comparing Ground Truth bounding boxes with model predictions.
 
 Usage:
-    python visualize.py --data-dir /path/to/tbx11k --checkpoint /path/to/checkpoint.pth --num-samples 5
+    python visualize.py --data-dir /path/to/tbx11k-simplified --checkpoint checkpoints/checkpoint_epoch_30.pth --num-samples 5
 """
 
 import os
-import argparse
 import random
+import argparse
 import torch
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from PIL import Image
 from torchvision import transforms
 
-from models import make_fasterrcnn_swin
-from datasets import TBX11KDetectionDataset
+from models import build_faster_rcnn
+from data import TBX11KDetectionDataset
+
+CLASS_NAMES = {1: "Active TB", 2: "Latent TB"}
+CLASS_COLORS = {1: "red", 2: "blue"}
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Visualize TB Bounding Box Predictions")
+    parser = argparse.ArgumentParser(description="Side-by-side Visualizer")
     parser.add_argument("--data-dir", type=str, required=True)
     parser.add_argument("--checkpoint", type=str, required=True)
-    parser.add_argument("--split", type=str, default="val")
+    parser.add_argument("--split", type=str, default="test")
     parser.add_argument("--num-samples", type=int, default=5)
-    parser.add_argument("--score-thresh", type=float, default=0.25)
+    parser.add_argument("--score-thresh", type=float, default=0.3)
     parser.add_argument("--output-dir", type=str, default="./visualizations")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     return parser.parse_args()
@@ -36,55 +38,63 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
 
-    img_dir = os.path.join(args.data_dir, args.split, "img")
-    json_path = os.path.join(args.data_dir, "annotations", f"{args.split}.json")
+    txt_file = os.path.join(args.data_dir, f"{args.split}.txt")
+    csv_file = os.path.join(args.data_dir, "data.csv")
+    img_dir = os.path.join(args.data_dir, "images")
 
-    # Load dataset without normalization for clean visual plotting
-    dataset = TBX11KDetectionDataset(img_dir, json_path, transform=transforms.ToTensor())
+    dataset = TBX11KDetectionDataset(
+        txt_file,
+        csv_file,
+        img_dir=img_dir,
+        transform=transforms.Compose([transforms.Resize((512, 512)), transforms.ToTensor()])
+    )
 
-    # Load model
-    model = make_fasterrcnn_swin(num_classes=2)
+    model = build_faster_rcnn(num_classes=3, img_size=512)
     ckpt = torch.load(args.checkpoint, map_location=args.device)
     model.load_state_dict(ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt)
     model.to(args.device)
     model.eval()
 
-    indices = random.sample(range(len(dataset)), min(args.num_samples, len(dataset)))
-    print(f"Visualizing {len(indices)} samples to {args.output_dir}...")
+    sample_indices = random.sample(range(len(dataset)), min(args.num_samples, len(dataset)))
 
-    for i, idx in enumerate(indices):
+    for idx in sample_indices:
         img_tensor, target = dataset[idx]
         with torch.no_grad():
             pred = model([img_tensor.to(args.device)])[0]
 
-        pred_boxes = pred["boxes"].cpu().numpy()
-        pred_scores = pred["scores"].cpu().numpy()
-        gt_boxes = target["boxes"].numpy()
-
-        fig, ax = plt.subplots(1, 1, figsize=(8, 8))
         img_np = img_tensor.permute(1, 2, 0).numpy()
-        ax.imshow(img_np)
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7))
 
-        # Plot Ground Truth (Green)
-        for b in gt_boxes:
-            x1, y1, x2, y2 = b
-            rect = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2, edgecolor='lime', facecolor='none')
-            ax.add_patch(rect)
+        # Ground Truth
+        ax1.imshow(img_np)
+        ax1.set_title("Ground Truth", fontsize=14, fontweight="bold")
+        ax1.axis("off")
+        for box, label in zip(target["boxes"].numpy(), target["labels"].numpy()):
+            x1, y1, x2, y2 = box
+            color = CLASS_COLORS.get(label, "green")
+            name = CLASS_NAMES.get(label, f"Class {label}")
+            rect = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2, edgecolor=color, facecolor="none")
+            ax1.add_patch(rect)
+            ax1.text(x1, max(0, y1 - 4), name, color=color, fontsize=10, backgroundcolor="black")
 
-        # Plot Predictions (Red dashed)
-        for b, score in zip(pred_boxes, pred_scores):
+        # Predictions
+        ax2.imshow(img_np)
+        ax2.set_title(f"Predictions (Threshold >= {args.score_thresh})", fontsize=14, fontweight="bold")
+        ax2.axis("off")
+        for box, score, label in zip(pred["boxes"].cpu().numpy(), pred["scores"].cpu().numpy(), pred["labels"].cpu().numpy()):
             if score >= args.score_thresh:
-                x1, y1, x2, y2 = b
-                rect = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2, edgecolor='red', linestyle='--', facecolor='none')
-                ax.add_patch(rect)
-                ax.text(x1, max(0, y1 - 5), f"{score:.2f}", color='red', fontsize=10, backgroundcolor='black')
+                x1, y1, x2, y2 = box
+                color = CLASS_COLORS.get(label, "yellow")
+                name = CLASS_NAMES.get(label, f"Class {label}")
+                rect = patches.Rectangle((x1, y1), x2 - x1, y2 - y1, linewidth=2, edgecolor=color, linestyle="--", facecolor="none")
+                ax2.add_patch(rect)
+                ax2.text(x1, max(0, y1 - 4), f"{name}: {score:.2f}", color=color, fontsize=10, backgroundcolor="black")
 
-        plt.title(f"Sample {idx}: Ground Truth (Green) vs. Prediction (Red, >={args.score_thresh})")
-        plt.axis('off')
-        save_path = os.path.join(args.output_dir, f"sample_{idx}.png")
-        plt.savefig(save_path, bbox_inches='tight', dpi=200)
+        save_p = os.path.join(args.output_dir, f"vis_sample_{idx}.png")
+        plt.tight_layout()
+        plt.savefig(save_p, dpi=200)
         plt.close()
-        print(f"Saved: {save_path}")
+        print(f"Saved visualization: {save_p}")
 
 
 if __name__ == "__main__":

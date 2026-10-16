@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
 evaluate.py
-Evaluates TBX11K Swin Faster R-CNN checkpoints using COCO mAP and Free-Response ROC (FROC).
+Computes Average Precision (AP50, AP75, AP@[.5:.95]), class-specific AP,
+class-agnostic TB localization performance, and the FROC score.
 
 Usage:
-    python evaluate.py --data-dir /path/to/tbx11k --checkpoint /path/to/checkpoint.pth
+    python evaluate.py --data-dir /path/to/tbx11k-simplified --checkpoint checkpoints/checkpoint_epoch_30.pth
 """
 
 import os
-import json
 import argparse
 import numpy as np
 import torch
@@ -16,168 +16,196 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.ops import box_iou
 from tqdm import tqdm
-import matplotlib.pyplot as plt
-from pycocotools.coco import COCO
-from pycocotools.cocoeval import COCOeval
 
-from models import make_fasterrcnn_swin
-from datasets import TBX11KDetectionDataset, detection_collate_fn
+from models import build_faster_rcnn
+from data import TBX11KDetectionDataset, detection_collate_fn
 
 
-def run_inference(model, loader, device):
-    all_preds, all_targets = [], []
-    with torch.no_grad():
-        for batch in tqdm(loader, desc="Running Validation"):
-            if not batch or len(batch) == 0:
-                continue
-            imgs, targets = batch
-            imgs = [img.to(device) for img in imgs]
-            preds = model(imgs)
-            all_preds.extend(preds)
-            all_targets.extend(targets)
-    return all_preds, all_targets
+def compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.5, class_id=None, class_agnostic=False):
+    """
+    Computes Average Precision for a specific IoU threshold and target class.
+    """
+    detected_gts = [set() for _ in all_gts]
+    total_gts = 0
 
+    pred_records = []
+    for img_idx, (preds, gts) in enumerate(zip(all_preds, all_gts)):
+        p_boxes = preds['boxes'].cpu().numpy()
+        p_scores = preds['scores'].cpu().numpy()
+        p_labels = preds['labels'].cpu().numpy()
 
-def pred_to_coco_format(all_preds, all_targets):
-    results = []
-    for idx, pred in enumerate(all_preds):
-        image_id = all_targets[idx]["image_id"].item()
-        boxes = pred["boxes"].cpu().numpy()
-        scores = pred["scores"].cpu().numpy()
-        labels = pred["labels"].cpu().numpy()
-        for box, score, label in zip(boxes, scores, labels):
-            x1, y1, x2, y2 = box
-            results.append({
-                "image_id": image_id,
-                "category_id": int(label),
-                "bbox": [float(x1), float(y1), float(x2 - x1), float(y2 - y1)],
-                "score": float(score)
+        g_boxes = gts['boxes'].cpu().numpy()
+        g_labels = gts['labels'].cpu().numpy()
+
+        if class_agnostic:
+            # Consider all positive classes (1 or 2) as positive (class 1)
+            valid_gt_mask = g_labels > 0
+            valid_p_mask = p_labels > 0
+        elif class_id is not None:
+            valid_gt_mask = (g_labels == class_id)
+            valid_p_mask = (p_labels == class_id)
+        else:
+            valid_gt_mask = g_labels > 0
+            valid_p_mask = p_labels > 0
+
+        g_boxes = g_boxes[valid_gt_mask]
+        total_gts += len(g_boxes)
+
+        for b, s in zip(p_boxes[valid_p_mask], p_scores[valid_p_mask]):
+            pred_records.append({
+                "img_idx": img_idx,
+                "box": b,
+                "score": float(s),
+                "g_boxes": g_boxes
             })
-    return results
 
-
-def compute_coco_map(val_json_path, results_list):
-    """Computes COCO mAP metrics using pycocotools."""
-    if not results_list:
-        print("[WARN] No predictions generated.")
+    if total_gts == 0:
         return 0.0
 
-    coco_gt = COCO(val_json_path)
-    tmp_pred_file = "/tmp/eval_preds_tmp.json"
-    with open(tmp_pred_file, "w") as f:
-        json.dump(results_list, f)
+    # Sort all predictions across the entire dataset by confidence descending
+    pred_records.sort(key=lambda x: x["score"], reverse=True)
 
-    coco_dt = coco_gt.loadRes(tmp_pred_file)
-    coco_eval = COCOeval(coco_gt, coco_dt, 'bbox')
-    coco_eval.evaluate()
-    coco_eval.accumulate()
-    coco_eval.summarize()
+    tp = np.zeros(len(pred_records))
+    fp = np.zeros(len(pred_records))
 
-    if os.path.exists(tmp_pred_file):
-        os.remove(tmp_pred_file)
+    for i, p in enumerate(pred_records):
+        img_idx = p["img_idx"]
+        p_box = torch.tensor([p["box"]])
+        g_boxes = p["g_boxes"]
 
-    return coco_eval.stats[0]  # AP @ [.5:.95]
+        if len(g_boxes) == 0:
+            fp[i] = 1
+            continue
 
+        ious = box_iou(p_box, torch.tensor(g_boxes)).squeeze(0).numpy()
+        best_gt_idx = np.argmax(ious)
+        best_iou = ious[best_gt_idx]
 
-def compute_froc(all_preds, all_targets, iou_thresh=0.3, target_fps=(0.5, 1.0, 2.0, 4.0, 8.0)):
-    """Computes Free-Response ROC (FROC) sensitivity at target false positive rates per image."""
-    all_gts = [t["boxes"].cpu().numpy() for t in all_targets]
-    total_gts = sum(len(b) for b in all_gts)
-    if total_gts == 0:
-        return 0.0, []
-
-    sensitivity_list = []
-    fp_per_img_list = []
-
-    for thresh in np.linspace(0.05, 0.95, 20):
-        found, false_pos = 0, 0
-        for i, pred in enumerate(all_preds):
-            keep = pred["scores"].cpu().numpy() >= thresh
-            boxes_pred = pred["boxes"].cpu().numpy()[keep]
-            gts = all_gts[i]
-            detected_gt = set()
-
-            for b_pred in boxes_pred:
-                matched = False
-                for j, b_gt in enumerate(gts):
-                    iou = box_iou(torch.tensor([b_pred]), torch.tensor([b_gt])).item()
-                    if iou >= iou_thresh and j not in detected_gt:
-                        detected_gt.add(j)
-                        found += 1
-                        matched = True
-                        break
-                if not matched:
-                    false_pos += 1
-
-        fp_per_img_list.append(false_pos / max(1, len(all_gts)))
-        sensitivity_list.append(found / total_gts)
-
-    # Calculate average sensitivity at target FP rates
-    sens_at_targets = []
-    for fp in target_fps:
-        idx = np.searchsorted(fp_per_img_list, fp, side='right')
-        if idx >= len(sensitivity_list):
-            sens_at_targets.append(sensitivity_list[-1])
+        if best_iou >= iou_thresh:
+            if best_gt_idx not in detected_gts[img_idx]:
+                tp[i] = 1
+                detected_gts[img_idx].add(best_gt_idx)
+            else:
+                fp[i] = 1  # Duplicate detection
         else:
-            sens_at_targets.append(sensitivity_list[idx])
+            fp[i] = 1
 
-    froc_score = float(np.mean(sens_at_targets))
-    return froc_score, sens_at_targets
+    cum_tp = np.cumsum(tp)
+    cum_fp = np.cumsum(fp)
+
+    recalls = cum_tp / total_gts
+    precisions = cum_tp / (cum_tp + cum_fp + 1e-6)
+
+    # 11-point interpolation or standard AUC PR
+    ap = 0.0
+    for r in np.linspace(0.0, 1.0, 11):
+        prec_at_r = precisions[recalls >= r]
+        p_max = np.max(prec_at_r) if len(prec_at_r) > 0 else 0.0
+        ap += p_max / 11.0
+
+    return float(ap)
+
+
+def calculate_froc(all_preds, all_gts, iou_thresh=0.5, max_fppi=2.0):
+    """
+    FROC curve: lesion sensitivity vs false positives per image (FPPI) over 50 score thresholds.
+    A prediction counts as a TP only if it overlaps an unmatched GT box of the same class.
+    FROC score = mean sensitivity over curve points with FPPI <= 1.0.
+    """
+    thresholds = np.linspace(0.05, 0.95, 50)
+    sensitivities, fps_per_img = [], []
+    n_images = len(all_gts)
+
+    for thresh in thresholds:
+        tp = fp = fn = 0
+        for preds, gts in zip(all_preds, all_gts):
+            keep = preds['scores'] >= thresh
+            p_boxes, p_labels = preds['boxes'][keep].cpu(), preds['labels'][keep].cpu()
+            g_boxes, g_labels = gts['boxes'].cpu(), gts['labels'].cpu()
+            ious = box_iou(p_boxes, g_boxes) if len(p_boxes) and len(g_boxes) else None
+
+            matched = set()
+            for i in range(len(p_boxes)):
+                best_iou, best_gt = 0.0, -1
+                for j in range(len(g_boxes)):
+                    if j in matched or int(p_labels[i]) != int(g_labels[j]):
+                        continue
+                    if ious[i, j] > best_iou:
+                        best_iou, best_gt = float(ious[i, j]), j
+                if best_iou >= iou_thresh:
+                    tp += 1
+                    matched.add(best_gt)
+                else:
+                    fp += 1
+            fn += len(g_boxes) - len(matched)
+
+        fppi = fp / n_images
+        if fppi <= max_fppi:
+            sensitivities.append(tp / (tp + fn) if (tp + fn) > 0 else 0)
+            fps_per_img.append(fppi)
+
+    in_range = [s for f, s in zip(fps_per_img, sensitivities) if f <= 1.0]
+    froc_score = float(np.mean(in_range)) if in_range else 0.0
+    return fps_per_img, sensitivities, froc_score
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Evaluate TBX11K Swin Faster R-CNN")
-    parser.add_argument("--data-dir", type=str, required=True,
-                        help="Path to TBX11K dataset directory")
-    parser.add_argument("--checkpoint", type=str, required=True,
-                        help="Path to checkpoint .pth file")
-    parser.add_argument("--split", type=str, default="val", choices=["val", "test"],
-                        help="Split to evaluate on")
-    parser.add_argument("--img-size", type=int, default=800,
-                        help="Input image resolution")
-    parser.add_argument("--num-classes", type=int, default=2,
-                        help="Number of foreground classes")
-    parser.add_argument("--batch-size", type=int, default=8,
-                        help="Evaluation batch size")
+    parser = argparse.ArgumentParser(description="Evaluate TBX11K Localization Model")
+    parser.add_argument("--data-dir", type=str, required=True)
+    parser.add_argument("--checkpoint", type=str, required=True)
+    parser.add_argument("--split", type=str, default="test", choices=["val", "test"])
+    parser.add_argument("--img-size", type=int, default=512)
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
-    parser.add_argument("--output-plot", type=str, default="evaluation_froc.png")
     args = parser.parse_args()
 
-    img_dir = os.path.join(args.data_dir, args.split, "img")
-    json_path = os.path.join(args.data_dir, "annotations", f"{args.split}.json")
+    txt_file = os.path.join(args.data_dir, f"{args.split}.txt")
+    csv_file = os.path.join(args.data_dir, "data.csv")
+    img_dir = os.path.join(args.data_dir, "images")
 
     transform = transforms.Compose([
         transforms.Resize((args.img_size, args.img_size)),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
 
-    val_set = TBX11KDetectionDataset(img_dir, json_path, transform=transform)
-    val_loader = DataLoader(val_set, batch_size=args.batch_size, shuffle=False,
-                            num_workers=4, collate_fn=detection_collate_fn)
+    test_dataset = TBX11KDetectionDataset(txt_file, csv_file, img_dir=img_dir, transform=transform)
+    test_loader = DataLoader(test_dataset, batch_size=8, shuffle=False, num_workers=4, collate_fn=detection_collate_fn)
 
     print(f"Loading checkpoint: {args.checkpoint}")
-    model = make_fasterrcnn_swin(num_classes=args.num_classes, img_size=args.img_size)
+    model = build_faster_rcnn(num_classes=3, img_size=args.img_size)
     ckpt = torch.load(args.checkpoint, map_location=args.device)
     model.load_state_dict(ckpt["model_state_dict"] if "model_state_dict" in ckpt else ckpt)
     model.to(args.device)
     model.eval()
 
-    print("Running inference...")
-    preds, targets = run_inference(model, val_loader, args.device)
-    coco_results = pred_to_coco_format(preds, targets)
+    all_preds, all_gts = [], []
+    with torch.no_grad():
+        for images, targets in tqdm(test_loader, desc=f"Evaluating on {args.split}"):
+            images = [img.to(args.device) for img in images]
+            preds = model(images)
+            all_preds.extend(preds)
+            all_gts.extend(targets)
 
-    print("\n" + "=" * 60)
-    print("COCO EVALUATION METRICS")
-    print("=" * 60)
-    mAP = compute_coco_map(json_path, coco_results)
+    # Compute metrics
+    ap50_active = compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.5, class_id=1)
+    ap50_latent = compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.5, class_id=2)
+    ap50_agnostic = compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.5, class_agnostic=True)
 
-    print("\n" + "=" * 60)
-    print("FROC EVALUATION METRICS")
-    print("=" * 60)
-    froc_score, sens_points = compute_froc(preds, targets)
-    print(f"Overall FROC Score: {froc_score:.4f}")
-    print(f"Sensitivity at [0.5, 1.0, 2.0, 4.0, 8.0] FP/Image: {sens_points}")
+    ap75_active = compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.75, class_id=1)
+    ap75_latent = compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.75, class_id=2)
+    ap75_agnostic = compute_ap_single_threshold(all_preds, all_gts, iou_thresh=0.75, class_agnostic=True)
+
+    _, _, froc_score = calculate_froc(all_preds, all_gts, iou_thresh=0.5, max_fppi=2.0)
+
+    print("\n" + "=" * 65)
+    print(f"TBX11K LOCALIZATION EVALUATION ({args.split.upper()} SET)")
+    print("=" * 65)
+    print(f"{'Condition / Metric':<30} | {'AP@0.50':<12} | {'AP@0.75':<12}")
+    print("-" * 65)
+    print(f"{'Active TB (Class 1)':<30} | {ap50_active:<12.4f} | {ap75_active:<12.4f}")
+    print(f"{'Latent TB (Class 2)':<30} | {ap50_latent:<12.4f} | {ap75_latent:<12.4f}")
+    print(f"{'Class-Agnostic TB Detection':<30} | {ap50_agnostic:<12.4f} | {ap75_agnostic:<12.4f}")
+    print("=" * 65)
+    print(f"FROC score (mean sensitivity at FPPI <= 1.0): {froc_score:.4f}")
 
 
 if __name__ == "__main__":

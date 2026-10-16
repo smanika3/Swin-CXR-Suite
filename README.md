@@ -31,7 +31,7 @@ flowchart TD
         C2 --> C4[Teacher-Student<br>Self-Training]
     end
 
-    subgraph Task2 ["Module 02 & 04: Detection"]
+    subgraph Task2 ["Module 02: Detection"]
         D1[Multi-Scale FPN Projections] --> D2[Anchor Generator]
         D2 --> D3[Faster R-CNN Detection Head]
         D3 --> D4[Active vs. Latent TB Bounding Boxes]
@@ -57,10 +57,8 @@ The repository is modularized into dedicated sub-projects, each with its own sel
 | Directory | Task | Target Classes | Architecture | Highlights |
 | :--- | :--- | :--- | :--- | :--- |
 | **[`01_classification/`](./01_classification)** | Multi-Label Thoracic Pathology | 14 CheXpert Labels (5 Leaderboard) | Swin-Base (`224x224`) | U-Ones/U-Zeros policies, LibAUC surrogate AUROC loss, pseudo-label distillation |
-| **[`02_detection/`](./02_detection)** | Tuberculosis Bounding Box Detection | Active TB vs. Obsolete TB | Swin-Base + Custom FPN + Faster R-CNN | Pure PyTorch / Torchvision implementation, standard COCO mAP & clinical FROC metrics |
+| **[`02_detection/`](./02_detection)** | Tuberculosis Lesion Detection | Active TB, Latent TB | Swin-Base + FPN + Faster R-CNN (`512x512`) | Stratified 4-category split (`No_TB`, `Active`, `Latent`, `Mixed`), class-specific & class-agnostic AP, FROC |
 | **[`03_segmentation/`](./03_segmentation)** | Anatomical Multi-Organ Segmentation | Right Lung, Left Lung, Heart | Swin-Unet-V2 | Multi-process RLE mask decoder, per-organ Dice tracking, failure case auditing |
-| **[`04_localization_tabular/`](./04_localization_tabular)** | TB Lesion Localization (Tabular) | Active TB, Latent TB, Normal | Swin-FPN Faster R-CNN (`512x512`) | Stratified 4-category splitting (`No_TB`, `Active`, `Latent`, `Mixed`), class-agnostic AP |
-| **[`05_detection_mmdet/`](./05_detection_mmdet)** | Detection Benchmarking (MMDetection) | Active TB, Obsolete TB | Swin-B Mask/Faster R-CNN | OpenMMLab MMDetection configurations and benchmark scripts |
 
 ---
 
@@ -172,8 +170,8 @@ Each module can be executed independently from root or from within its subdirect
 # 1. Run CheXpert multi-label classification training
 python 01_classification/train_baseline.py --data-dir /path/to/chexpert
 
-# 2. Run TBX11K native Faster R-CNN detection training
-python 02_detection/train.py --data-dir /path/to/tbx11k
+# 2. Run TBX11K Swin-FPN Faster R-CNN detection training
+python 02_detection/train.py --data-dir /path/to/tbx11k-simplified
 
 # 3. Run CheXmask Swin-Unet segmentation training
 python 03_segmentation/train.py \
@@ -181,9 +179,6 @@ python 03_segmentation/train.py \
     --mask-dir /path/to/chexmask-masks \
     --train-list /path/to/train_files.txt \
     --val-list /path/to/val_files.txt
-
-# 4. Run TBX11K stratified tabular localization training
-python 04_localization_tabular/train.py --data-dir /path/to/tbx11k-simplified
 ```
 
 ---
@@ -204,12 +199,11 @@ Swin-CXR-Suite/
 │   ├── evaluate.py                # Multi-label AUROC evaluator
 │   └── results/                   # CheXpert figures, slides, CSV tables
 │
-├── 02_detection/                  # TBX11K native Faster R-CNN detection
-│   ├── models/                    # SwinBackboneFPN implementation
-│   ├── datasets/                  # COCO dataset loader & collate
-│   ├── tools/                     # Raw TBX11K to COCO converter
-│   ├── train.py                   # PyTorch training loop
-│   ├── evaluate.py                # COCO mAP and FROC evaluation
+├── 02_detection/                  # TBX11K Swin-FPN Faster R-CNN detection
+│   ├── models/                    # SwinBackboneWithFPN & Faster R-CNN
+│   ├── data/                      # CSV dataset loader & 4-category stratified splits
+│   ├── train.py                   # AdamW training loop
+│   ├── evaluate.py                # Class-specific / class-agnostic AP and FROC
 │   ├── visualize.py               # Ground Truth vs Prediction visualizer
 │   └── results/                   # TBX11K figures, slides, CSV tables
 │
@@ -220,17 +214,6 @@ Swin-CXR-Suite/
 │   ├── train.py                   # Dice & CrossEntropy segmentation loop
 │   ├── evaluate.py                # Organ-wise Dice score evaluation
 │   └── results/                   # CheXmask figures, slides, CSV tables
-│
-├── 04_localization_tabular/       # TBX11K stratified tabular localization
-│   ├── models/                    # SwinBackboneWithFPN & Faster R-CNN
-│   ├── data/                      # 4-category stratified split generator
-│   ├── train.py                   # Training pipeline
-│   ├── evaluate.py                # Class-specific and class-agnostic AP
-│   └── visualize.py               # Side-by-side visualizer
-│
-├── 05_detection_mmdet/            # MMDetection TBX11K benchmark configs
-│   ├── configs/                   # MMDetection Swin-B configs
-│   └── tools/                     # Conversion and training helpers
 │
 └── LICENSE                        # MIT
 ```

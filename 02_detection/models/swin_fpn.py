@@ -1,108 +1,99 @@
 """
 swin_fpn.py
-Modular Faster R-CNN detector with a Swin Transformer backbone and Feature Pyramid Network (FPN).
+Faster R-CNN detector with Swin Transformer backbone and FeaturePyramidNetwork.
 """
 
+from collections import OrderedDict
 import torch
 import torch.nn as nn
 from torchvision.models.detection import FasterRCNN
 from torchvision.models.detection.rpn import AnchorGenerator
-from torchvision.ops import MultiScaleRoIAlign
+from torchvision.ops import FeaturePyramidNetwork
+from torchvision.ops.feature_pyramid_network import LastLevelMaxPool
 import timm
 
 
-class SwinBackboneFPN(nn.Module):
+class SwinBackboneWithFPN(nn.Module):
     """
-    Swin Transformer backbone connected to an FPN projection.
-    Extracts multi-scale hierarchical feature representations from 4 stages.
+    Swin Transformer backbone connected with torchvision FeaturePyramidNetwork.
+    Extracts features from stages 1, 2, 3 (channels 256, 512, 1024) and projects to 256.
     """
     def __init__(
         self,
-        model_name: str = 'swin_base_patch4_window7_224',
+        model_name: str = "swin_base_patch4_window7_224",
         pretrained: bool = True,
-        img_size: int = 800,
+        img_size: int = 512,
         out_channels: int = 256
     ):
         super().__init__()
-        self.swin = timm.create_model(
+        self.body = timm.create_model(
             model_name,
             pretrained=pretrained,
             features_only=True,
-            out_indices=(0, 1, 2, 3),
+            out_indices=[1, 2, 3],
             img_size=img_size
         )
 
-        # Swin-B default channels across stages: [128, 256, 512, 1024]
-        # Inspect dynamically from timm feature info if available
-        feature_info = getattr(self.swin, 'feature_info', None)
-        if feature_info is not None:
-            swin_channels = [info['num_chs'] for info in feature_info]
-        else:
-            swin_channels = [128, 256, 512, 1024]
+        feature_info = self.body.feature_info.get_dicts()
+        in_channels_list = [f['num_chs'] for f in feature_info]
 
-        self.fpn_proj = nn.ModuleList([
-            nn.Conv2d(c, out_channels, kernel_size=1) for c in swin_channels
-        ])
+        self.fpn = FeaturePyramidNetwork(
+            in_channels_list=in_channels_list,
+            out_channels=out_channels,
+            extra_blocks=LastLevelMaxPool()
+        )
         self.out_channels = out_channels
 
     def forward(self, x: torch.Tensor):
-        feats = self.swin(x)
-        out = {}
-        for i, (feat, proj) in enumerate(zip(feats, self.fpn_proj)):
-            # Swin output is [B, H, W, C] in some timm versions; permute to [B, C, H, W] if needed
-            if feat.dim() == 4 and feat.shape[-1] == proj.in_channels and feat.shape[1] != proj.in_channels:
-                feat = feat.permute(0, 3, 1, 2).contiguous()
-            feat = proj(feat)
-            out[str(i)] = feat
-        return out
+        features = self.body(x)
+        # Convert NHWC -> NCHW if necessary
+        features = [feat.permute(0, 3, 1, 2).contiguous() for feat in features]
+
+        features_dict = OrderedDict()
+        for i, feat in enumerate(features):
+            features_dict[str(i)] = feat
+
+        fpn_features = self.fpn(features_dict)
+        return fpn_features
 
 
-def make_fasterrcnn_swin(
-    num_classes: int = 2,
-    model_name: str = 'swin_base_patch4_window7_224',
+def build_faster_rcnn(
+    num_classes: int = 3,
+    model_name: str = "swin_base_patch4_window7_224",
     pretrained: bool = True,
-    img_size: int = 800,
-    fpn_channels: int = 256
+    img_size: int = 512,
+    box_score_thresh: float = 0.05
 ) -> FasterRCNN:
     """
-    Constructs a Faster R-CNN model with Swin Transformer FPN backbone.
+    Builds a Faster R-CNN model with Swin-FPN backbone.
 
     Args:
-        num_classes: Number of foreground classes (background is implicitly class 0 in torchvision).
-        model_name: timm model identifier for Swin Transformer.
-        pretrained: Whether to initialize with ImageNet pre-trained weights.
-        img_size: Expected input image resolution.
-        fpn_channels: Number of output channels for the FPN layers.
+        num_classes: Total classes including background (e.g., 3: Background=0, Active_TB=1, Latent_TB=2).
+        model_name: Backbone model identifier.
+        pretrained: Load ImageNet pretrained weights.
+        img_size: Image dimension.
+        box_score_thresh: Minimum classification score threshold during inference.
 
     Returns:
-        torchvision.models.detection.FasterRCNN instance.
+        FasterRCNN model.
     """
-    backbone = SwinBackboneFPN(
+    backbone = SwinBackboneWithFPN(
         model_name=model_name,
         pretrained=pretrained,
-        img_size=img_size,
-        out_channels=fpn_channels
+        img_size=img_size
     )
 
-    anchor_gen = AnchorGenerator(
+    anchor_generator = AnchorGenerator(
         sizes=((32,), (64,), (128,), (256,)),
         aspect_ratios=((0.5, 1.0, 2.0),) * 4
     )
 
-    roi_pooler = MultiScaleRoIAlign(
-        featmap_names=['0', '1', '2', '3'],
-        output_size=7,
-        sampling_ratio=2
-    )
-
-    # Note: torchvision FasterRCNN requires num_classes to include the background class
-    # For 2 TB classes (Active TB, Obsolete TB), total classes = 2 + 1 = 3
-    total_classes = num_classes + 1
-
     model = FasterRCNN(
         backbone=backbone,
-        num_classes=total_classes,
-        rpn_anchor_generator=anchor_gen,
-        box_roi_pool=roi_pooler
+        num_classes=num_classes,
+        rpn_anchor_generator=anchor_generator,
+        box_score_thresh=box_score_thresh,
+        min_size=img_size,
+        max_size=img_size
     )
     return model

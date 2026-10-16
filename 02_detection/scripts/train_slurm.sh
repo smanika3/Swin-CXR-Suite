@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Swin_FRCNN_TBX
+#SBATCH --job-name=TBX_Localize_Swin
 #SBATCH --partition=gpu
 #SBATCH --qos=public
 #SBATCH --gpus=1
@@ -9,7 +9,7 @@
 #SBATCH --output=logs/train_%j.out
 #SBATCH --error=logs/train_%j.err
 
-echo "=== Starting Swin Faster R-CNN Training on TBX11K ==="
+echo "=== Starting TBX11K Swin Localization Training ==="
 date
 
 module purge
@@ -21,12 +21,11 @@ source activate swin_pytorch_env
 mkdir -p logs checkpoints
 
 python -u train.py \
-    --data-dir /scratch/$USER/tbx11k-unzip \
+    --data-dir /scratch/$USER/v2TBX11k-Dataset/tbx11k-simplified \
     --checkpoint-dir ./checkpoints \
     --epochs 30 \
     --batch-size 8 \
-    --lr 0.005 \
-    --num-workers 8 \
+    --lr 1e-4 \
     --resume
 
 echo "=== Training Finished ==="
