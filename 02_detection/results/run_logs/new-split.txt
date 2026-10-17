@@ -1,0 +1,28 @@
+================================================================================
+STRATIFIED SPLIT RESULTS
+================================================================================
+No_TB:
+  Total: 6000
+  Train: 4200 (70.0%)
+  Test:  1800 (30.0%)
+Active_TB:
+  Total: 473
+  Train: 332 (70.2%)
+  Test:  141 (29.8%)
+Latent_TB:
+  Total: 103
+  Train: 73 (70.9%)
+  Test:  30 (29.1%)
+Mixed_TB:
+  Total: 23
+  Train: 17 (73.9%)
+  Test:  6 (26.1%)
+
+Total Train: 4622
+Total Val: 1800
+Total Test: 1977
+================================================================================
+
+Wrote 4622 image paths to /scratch/smanika3/v2TBX11k-Dataset/tbx11k-simplified/train.txt.
+Wrote 1800 image paths to /scratch/smanika3/v2TBX11k-Dataset/tbx11k-simplified/val.txt.
+Wrote 1977 image paths to /scratch/smanika3/v2TBX11k-Dataset/tbx11k-simplified/test.txt.

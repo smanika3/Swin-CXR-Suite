@@ -1,0 +1,72 @@
+=== Starting Swin Transformer GPU Training Job (Array Task 3) ===
+Sun Nov 23 19:59:54 MST 2025
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Train dataset size: 223414
+[DEBUG] Validation dataset size: 234
+[DEBUG] DataLoaders created with persistent_workers=True
+[INFO] Only one GPU found
+[INFO] Resuming from checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_20.pth
+[INFO] Training from epoch 21 to 30
+[INFO] Epoch 21 completed. Avg Train Loss: 0.4747
+[INFO] Epoch 21 validation loss: 0.3709
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_21.pth
+        Train Loss: 0.4747, Val Loss: 0.3709
+        Saved at 2025-11-23 20:13:33
+
+[INFO] Epoch 22 completed. Avg Train Loss: 0.4746
+[INFO] Epoch 22 validation loss: 0.3757
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_22.pth
+        Train Loss: 0.4746, Val Loss: 0.3757
+        Saved at 2025-11-23 20:42:09
+
+[INFO] Epoch 23 completed. Avg Train Loss: 0.4744
+[INFO] Epoch 23 validation loss: 0.3662
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_23.pth
+        Train Loss: 0.4744, Val Loss: 0.3662
+        Saved at 2025-11-23 21:09:23
+
+[INFO] Epoch 24 completed. Avg Train Loss: 0.4744
+[INFO] Epoch 24 validation loss: 0.3701
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_24.pth
+        Train Loss: 0.4744, Val Loss: 0.3701
+        Saved at 2025-11-23 21:31:51
+
+[INFO] Epoch 25 completed. Avg Train Loss: 0.4735
+[INFO] Epoch 25 validation loss: 0.3713
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_25.pth
+        Train Loss: 0.4735, Val Loss: 0.3713
+        Saved at 2025-11-23 21:51:55
+
+[INFO] Epoch 26 completed. Avg Train Loss: 0.4734
+[INFO] Epoch 26 validation loss: 0.3660
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_26.pth
+        Train Loss: 0.4734, Val Loss: 0.3660
+        Saved at 2025-11-23 22:10:09
+
+[INFO] Epoch 27 completed. Avg Train Loss: 0.4728
+[INFO] Epoch 27 validation loss: 0.3732
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_27.pth
+        Train Loss: 0.4728, Val Loss: 0.3732
+        Saved at 2025-11-23 22:29:51
+
+[INFO] Epoch 28 completed. Avg Train Loss: 0.4722
+[INFO] Epoch 28 validation loss: 0.3668
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_28.pth
+        Train Loss: 0.4722, Val Loss: 0.3668
+        Saved at 2025-11-23 22:49:45
+
+[INFO] Epoch 29 completed. Avg Train Loss: 0.4717
+[INFO] Epoch 29 validation loss: 0.3660
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_29.pth
+        Train Loss: 0.4717, Val Loss: 0.3660
+        Saved at 2025-11-23 23:09:55
+
+[INFO] Epoch 30 completed. Avg Train Loss: 0.4709
+[INFO] Epoch 30 validation loss: 0.3777
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh2/checkpoint_epoch_30.pth
+        Train Loss: 0.4709, Val Loss: 0.3777
+        Saved at 2025-11-23 23:29:36
+
+[INFO] Student training job finished
+=== GPU Training Job Finished (Array Task 3) ===
+Sun Nov 23 23:29:38 MST 2025

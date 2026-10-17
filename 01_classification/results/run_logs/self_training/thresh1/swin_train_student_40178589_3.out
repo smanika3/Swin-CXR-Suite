@@ -1,0 +1,27 @@
+=== Starting Swin Transformer GPU Training Job (Array Task 3) ===
+Sun Nov 23 10:45:46 MST 2025
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Train dataset size: 223414
+[DEBUG] Validation dataset size: 234
+[DEBUG] DataLoaders created with persistent_workers=True
+[INFO] Only one GPU found
+[INFO] Resuming from checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh1/checkpoint_epoch_20.pth
+[INFO] Training from epoch 21 to 30
+[INFO] Epoch 21 completed. Avg Train Loss: 0.4738
+[INFO] Epoch 21 validation loss: 0.3680
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh1/checkpoint_epoch_21.pth
+        Train Loss: 0.4738, Val Loss: 0.3680
+        Saved at 2025-11-23 11:08:01
+
+[INFO] Epoch 22 completed. Avg Train Loss: 0.4743
+[INFO] Epoch 22 validation loss: 0.3723
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh1/checkpoint_epoch_22.pth
+        Train Loss: 0.4743, Val Loss: 0.3723
+        Saved at 2025-11-23 11:31:21
+
+[INFO] Epoch 23 completed. Avg Train Loss: 0.4730
+[INFO] Epoch 23 validation loss: 0.3686
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh1/checkpoint_epoch_23.pth
+        Train Loss: 0.4730, Val Loss: 0.3686
+        Saved at 2025-11-23 11:53:32
+

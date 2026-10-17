@@ -1,0 +1,51 @@
+=== Starting Swin Transformer GPU Training Job (Job ID: 39951205) ===
+Thu Nov 20 14:05:09 MST 2025
+[INFO] No checkpoint found, starting from scratch
+Epoch 1: Train loss 0.0315
+Epoch 1: Val loss 0.0211
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_1.pth at 2025-11-20 14:10:43
+Epoch 2: Train loss 0.0208
+Epoch 2: Val loss 0.0247
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_2.pth at 2025-11-20 14:15:44
+Epoch 3: Train loss 0.0207
+Epoch 3: Val loss 0.0213
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_3.pth at 2025-11-20 14:20:43
+Epoch 4: Train loss 0.0172
+Epoch 4: Val loss 0.0252
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_4.pth at 2025-11-20 14:25:45
+Epoch 5: Train loss 0.0156
+Epoch 5: Val loss 0.0192
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_5.pth at 2025-11-20 14:30:47
+Epoch 6: Train loss 0.0145
+Epoch 6: Val loss 0.0191
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_6.pth at 2025-11-20 14:35:46
+Epoch 7: Train loss 0.0156
+Epoch 7: Val loss 0.0228
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_7.pth at 2025-11-20 14:40:45
+Epoch 8: Train loss 0.0141
+Epoch 8: Val loss 0.0226
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_8.pth at 2025-11-20 14:45:46
+Epoch 9: Train loss 0.0148
+Epoch 9: Val loss 0.0216
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_9.pth at 2025-11-20 14:50:46
+Epoch 10: Train loss 0.0143
+Epoch 10: Val loss 0.0225
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_10.pth at 2025-11-20 14:55:47
+Epoch 11: Train loss 0.0100
+Epoch 11: Val loss 0.0183
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_11.pth at 2025-11-20 15:00:47
+Epoch 12: Train loss 0.0100
+Epoch 12: Val loss 0.0190
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_12.pth at 2025-11-20 15:05:50
+Epoch 13: Train loss 0.0097
+Epoch 13: Val loss 0.0196
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_13.pth at 2025-11-20 15:10:50
+Epoch 14: Train loss 0.0079
+Epoch 14: Val loss 0.0195
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_14.pth at 2025-11-20 15:15:52
+Epoch 15: Train loss 0.0082
+Epoch 15: Val loss 0.0287
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_15.pth at 2025-11-20 15:20:52
+Epoch 16: Train loss 0.0093
+Epoch 16: Val loss 0.0280
+[INFO] Saved checkpoint: /scratch/smanika3/swin-localization-logs/checkpoints/checkpoint_epoch_16.pth at 2025-11-20 15:25:51

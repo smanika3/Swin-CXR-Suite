@@ -130,6 +130,8 @@ class CheXpertDatasetFiltered(Dataset):
         return image, actual_idx  # Return actual index for CSV alignment
 
 # ================= SOFT LABEL GENERATION CONFIG =================
+# The supplementary soft-label student (results/run_logs/self_training/swin_predict_teacher_39019568.out) was
+# generated with THRESHOLDING = False; set it back to False to reproduce that run.
 THRESHOLDING = True
 THRESH_HIGH = 0.8
 THRESH_LOW = 0.2

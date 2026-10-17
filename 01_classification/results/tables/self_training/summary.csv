@@ -1,0 +1,7 @@
+Run,Pseudo-labels,Threshold high,Threshold low,Epochs evaluated,Best epoch,Atelectasis,Cardiomegaly,Consolidation,Edema,Pleural Effusion,Mean leaderboard AUC
+no-thresh,soft pseudo-labels (no threshold),-,-,19,3,0.8634,0.8741,0.8979,0.9043,0.9580,0.8995
+thresh1,thresholded (between the thresholds stays soft),0.5,0.5,23,3,0.8218,0.8756,0.9004,0.9080,0.9510,0.8914
+thresh2,thresholded (between the thresholds stays soft),0.6,0.4,36,4,0.8576,0.8699,0.9138,0.9155,0.9562,0.9026
+thresh3,thresholded (between the thresholds stays soft),0.7,0.3,31,7,0.8674,0.8589,0.9121,0.9137,0.9570,0.9018
+thresh4,thresholded (between the thresholds stays soft),0.8,0.2,28,4,0.8557,0.8880,0.8893,0.9167,0.9601,0.9020
+thresh5,thresholded (between the thresholds stays soft),0.9,0.1,40,6,0.8696,0.8872,0.8803,0.9171,0.9596,0.9028

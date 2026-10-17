@@ -1,0 +1,91 @@
+=== Starting Swin Transformer GPU TESTING Job (Array Task ) ===
+Thu Nov 20 15:37:45 MST 2025
+Found 16 checkpoints
+
+Evaluating: checkpoint_epoch_1.pth
+Epoch 1: AP50_TB=0.3478, AP75_TB=0.0569, FROC=0.2394
+
+Evaluating: checkpoint_epoch_2.pth
+Epoch 2: AP50_TB=0.4809, AP75_TB=0.0730, FROC=0.3328
+
+Evaluating: checkpoint_epoch_3.pth
+Epoch 3: AP50_TB=0.5532, AP75_TB=0.1635, FROC=0.4204
+
+Evaluating: checkpoint_epoch_4.pth
+Epoch 4: AP50_TB=0.5785, AP75_TB=0.1518, FROC=0.4920
+
+Evaluating: checkpoint_epoch_5.pth
+Epoch 5: AP50_TB=0.6299, AP75_TB=0.1148, FROC=0.5542
+
+Evaluating: checkpoint_epoch_6.pth
+Epoch 6: AP50_TB=0.6622, AP75_TB=0.1059, FROC=0.4991
+
+Evaluating: checkpoint_epoch_7.pth
+Epoch 7: AP50_TB=0.6007, AP75_TB=0.1530, FROC=0.4626
+
+Evaluating: checkpoint_epoch_8.pth
+Epoch 8: AP50_TB=0.4560, AP75_TB=0.0718, FROC=0.4277
+
+Evaluating: checkpoint_epoch_9.pth
+Epoch 9: AP50_TB=0.5769, AP75_TB=0.1371, FROC=0.5011
+
+Evaluating: checkpoint_epoch_10.pth
+Epoch 10: AP50_TB=0.4634, AP75_TB=0.0735, FROC=0.4168
+
+Evaluating: checkpoint_epoch_11.pth
+Epoch 11: AP50_TB=0.6449, AP75_TB=0.1239, FROC=0.5930
+
+Evaluating: checkpoint_epoch_12.pth
+Epoch 12: AP50_TB=0.5941, AP75_TB=0.1826, FROC=0.4990
+
+Evaluating: checkpoint_epoch_13.pth
+Epoch 13: AP50_TB=0.5771, AP75_TB=0.1444, FROC=0.5212
+
+Evaluating: checkpoint_epoch_14.pth
+Epoch 14: AP50_TB=0.5828, AP75_TB=0.1610, FROC=0.4345
+
+Evaluating: checkpoint_epoch_15.pth
+Epoch 15: AP50_TB=0.6332, AP75_TB=0.1905, FROC=0.5817
+
+Evaluating: checkpoint_epoch_16.pth
+Epoch 16: AP50_TB=0.5496, AP75_TB=0.1352, FROC=0.4530
+Saved: /scratch/smanika3/swin-localization-logs/test_results/ap50_vs_epoch.png
+Saved: /scratch/smanika3/swin-localization-logs/test_results/ap75_vs_epoch.png
+Saved: /scratch/smanika3/swin-localization-logs/test_results/froc_vs_epoch.png
+Saved: /scratch/smanika3/swin-localization-logs/test_results/froc_curves_all.png
+
+========================================================================================================================
+EVALUATION SUMMARY - PER-CLASS AND CATEGORY-AGNOSTIC AP
+========================================================================================================================
+Epoch    AP50_TB    AP50_Act   AP50_Lat   AP75_TB    AP75_Act   AP75_Lat   FROC      
+------------------------------------------------------------------------------------------------------------------------
+1        0.347785   0.307664   0.004241   0.056917   0.023250   0.000000   0.239449   
+2        0.480936   0.454327   0.024974   0.072989   0.072978   0.001229   0.332751   
+3        0.553177   0.516501   0.012140   0.163549   0.154636   0.000978   0.420354   
+4        0.578454   0.550302   0.030746   0.151809   0.139633   0.000705   0.491982   
+5        0.629876   0.596944   0.087363   0.114823   0.108348   0.047636   0.554228   
+6        0.662184   0.624134   0.076281   0.105889   0.090234   0.002525   0.499084    ★AP50
+7        0.600674   0.585674   0.161808   0.152962   0.154368   0.007710   0.462607   
+8        0.455966   0.455929   0.040236   0.071824   0.071604   0.003963   0.427674   
+9        0.576860   0.568392   0.075175   0.137139   0.117281   0.006057   0.501099   
+10       0.463374   0.434259   0.054495   0.073518   0.069330   0.004559   0.416850   
+11       0.644900   0.611429   0.140986   0.123882   0.109480   0.009510   0.593040    ★FROC
+12       0.594134   0.575666   0.096456   0.182648   0.187445   0.005582   0.498974   
+13       0.577126   0.571213   0.110927   0.144377   0.139795   0.004481   0.521245   
+14       0.582806   0.536107   0.120037   0.161026   0.157311   0.017251   0.434505   
+15       0.633185   0.601551   0.124906   0.190531   0.175381   0.036710   0.581685    ★AP75
+16       0.549596   0.558989   0.181084   0.135161   0.144019   0.015596   0.453040   
+========================================================================================================================
+Best AP50 (TB Agnostic): 0.662184 at Epoch 6
+Best AP75 (TB Agnostic): 0.190531 at Epoch 15
+Best FROC Score: 0.593040 at Epoch 11
+
+Results saved to: /scratch/smanika3/swin-localization-logs/test_results
+Individual FROC curves saved to: /scratch/smanika3/swin-localization-logs/plots
+========================================================================================================================
+
+CSV results saved to: /scratch/smanika3/swin-localization-logs/test_results/evaluation_results.csv
+
+Test evaluation complete!
+=== GPU TESTING Job Finished (Array Task ) ===
+Thu Nov 20 15:54:17 MST 2025

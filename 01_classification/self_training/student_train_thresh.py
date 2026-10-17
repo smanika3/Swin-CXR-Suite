@@ -28,9 +28,9 @@ BATCH_SIZE = 96
 NUM_CLASSES = 14
 TOTAL_EPOCHS = 100
 EPOCHS_PER_JOB = 10
-# EDIT BEFORE RUNNING: author's ASU Sol paths. TRAIN_CSV_PATH must be a CSV written by teacher_predict.py;
-# teacher_predict.py names its output train_pseudolabels.csv (thresholds 0.8/0.2). For the 0.9/0.1 file named below,
-# set THRESH_HIGH=0.9, THRESH_LOW=0.1 and OUTPUT_CSV_PATH accordingly in teacher_predict.py.
+# EDIT BEFORE RUNNING: author's ASU Sol paths. TRAIN_CSV_PATH must be one of the
+# train_pseudolabels_thresh_<high>_<low>.csv files written by teacher_predict_multi.py. The author ran this script
+# once per file (thresh1..thresh5 = 0.5/0.5 ... 0.9/0.1), changing TRAIN_CSV_PATH and CHECKPOINT_DIR each time.
 CHECKPOINT_DIR = "/scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5"
 os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 

@@ -97,6 +97,9 @@ Input CXR (224 x 224 x 3)
 ├── analysis/
 │   ├── __init__.py
 │   └── min_max_analysis.py      # Plots the 3 best and 3 worst test predictions
+├── original_run/                # Exact scripts of the reported run (hardcoded ASU Sol paths)
+│   ├── train_swin_seg.py / .sh  # Training
+│   └── test.py / test.sh        # Scores every checkpoint on the test set: Dice/loss plots, sample predictions
 ├── assets/                      # Evaluation curves and sample predictions
 ├── results/                     # Results extracted from the final presentation
 ├── scripts/

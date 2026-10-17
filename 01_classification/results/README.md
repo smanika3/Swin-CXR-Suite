@@ -120,6 +120,73 @@ Leaderboard rows shown on the slide for reference: top entry *DeepAUC-v1 ensembl
 - The leaderboard entries (0.930, 0.911) are still above 0.9004.
 - *Caveat:* the slide compares the paper's **validation** AUC with Swin's **test** AUC, so the comparison is indicative, not like-for-like.
 
+## 1.6 Run logs and all-class AUROC
+
+The original SLURM logs of this run are in [`run_logs/exp1/`](run_logs/exp1):
+- `train.txt` is the training job (Nov 9–10, 2025), with the epoch-by-epoch train and validation loss from table 1.2.
+- `test.txt` is the test job (Nov 11, 2025), scoring all 18 checkpoints on the 668-image test set; its AUROCs are table 1.4.
+
+The CSV the test job wrote has per-epoch AUROC for all 14 classes: [`exp1_chexpert_auroc_all_classes_per_epoch.csv`](tables/exp1_chexpert_auroc_all_classes_per_epoch.csv). It is the source of table 1.4.
+
+The test job also drew these two charts. They are the original full-resolution PNGs; the slide figures in 1.3 were taken from them.
+
+![Exp 1 leaderboard AUROC per epoch, original](figures/exp1_leaderboard_auroc_original.png)
+
+*[`exp1_leaderboard_auroc_original.png`](figures/exp1_leaderboard_auroc_original.png): the 5 leaderboard classes and their mean (black dashed) over the 18 epochs.* It is the same data as slide 19, without the slide's annotation:
+- The mean peaks at epoch 2 (0.9004) and stays within about 0.87–0.89 afterwards.
+- Pleural Effusion sits on top the whole run.
+- Atelectasis has the deepest dips (epochs 4 and 8), and Consolidation drops sharply at epochs 10 and 13.
+
+![Exp 1 AUROC of all 12 scored classes, original](figures/exp1_all_classes_auroc_original.png)
+
+*[`exp1_all_classes_auroc_original.png`](figures/exp1_all_classes_auroc_original.png): every class the test job scored (12 of the 14; `No Finding` and `Support Devices` are not plotted).* This is not in the slides.
+- Pneumothorax (up to 0.999 at epoch 12) and Pleural Other (0.94–0.99) score highest.
+- Pleural Effusion (0.945–0.963), Lung Opacity (0.873–0.916) and Edema (0.878–0.922) are steady across epochs. Lung Lesion swings widely (0.817–0.960).
+- The weakest classes are Pneumonia (0.69–0.83), Fracture (0.58–0.79) and Enlarged Cardiomediastinum (0.51–0.70).
+- *Note:* matplotlib's 10-colour cycle repeats here. Enlarged Cardiomediastinum and Pleural Other are both dark blue (lowest and near-top lines), and Cardiomegaly and Fracture are both orange (about 0.85 and the lower orange line).
+
+---
+
+## Supplementary: teacher–student self-training
+
+*Not in the presentation. Run after it (Nov 12–25, 2025) as another way to use the uncertain labels; method in [`../README.md`](../README.md#another-approach-teacherstudent-self-training).*
+
+The reported run's checkpoints act as the teacher. They replace the 138,879 uncertain (`-1`) training labels with pseudo-labels, and a new Swin-B student is trained from ImageNet weights on the result. Every student checkpoint was scored on the same 668-image test set, and the best epoch was picked from those scores, exactly as for the reported run.
+
+| Student | Pseudo-labels (high / low) | Best epoch | Atelectasis | Cardiomegaly | Consolidation | Edema | Pleural Effusion | Mean |
+|---|---|---|---|---|---|---|---|---|
+| Soft | teacher probability | 3 | 0.8634 | 0.8741 | 0.8979 | 0.9043 | 0.9580 | 0.8995 |
+| thresh1 | 0.5 / 0.5 | 3 | 0.8218 | 0.8756 | 0.9004 | 0.9080 | 0.9510 | 0.8914 |
+| thresh2 | 0.6 / 0.4 | 4 | 0.8576 | 0.8699 | 0.9138 | 0.9155 | 0.9562 | 0.9026 |
+| thresh3 | 0.7 / 0.3 | 7 | 0.8674 | 0.8589 | 0.9121 | 0.9137 | 0.9570 | 0.9018 |
+| thresh4 | 0.8 / 0.2 | 4 | 0.8557 | 0.8880 | 0.8893 | 0.9167 | 0.9601 | 0.9020 |
+| **thresh5** | **0.9 / 0.1** | **6** | **0.8696** | **0.8872** | **0.8803** | **0.9171** | **0.9596** | **0.9028** |
+| Reported run (teacher), epoch 2 | — | 2 | 0.8606 | 0.8697 | 0.8987 | 0.9165 | 0.9566 | 0.9004 |
+
+CSV: [`tables/self_training/summary.csv`](tables/self_training/summary.csv). Per-epoch, all-class CSVs per student are in [`tables/self_training/`](tables/self_training).
+
+![Best student (thresh5) leaderboard AUROC per epoch](figures/self_training_thresh5_leaderboard_auroc.png)
+
+*[`self_training_thresh5_leaderboard_auroc.png`](figures/self_training_thresh5_leaderboard_auroc.png): the best student (0.9 / 0.1 pseudo-labels), with the 5 leaderboard classes and their mean over its 40 epochs. Drawn by the test job.*
+- The mean peaks at epoch 6 (0.9028), with near-peaks at epochs 1, 10, 13 and 31 (0.894–0.899).
+- After epoch 31 the mean drifts down to about 0.865 by epoch 40. Training longer on the pseudo-labels does not help, so the gain comes in the first few epochs, as it did for the teacher.
+- Class behaviour matches the teacher: Pleural Effusion stays highest (0.945–0.962), and Atelectasis and Cardiomegaly swing the most.
+
+- Four of the five thresholded students beat the teacher, by +0.0014 to +0.0024. Best is thresh5 (0.9 / 0.1) at 0.9028.
+- Soft labels (0.8995) and the 0.5 / 0.5 threshold (0.8914) do not beat it. Turning every pseudo-label into a hard 0 or 1 hurts most, and Atelectasis falls to 0.8218.
+- Compared with the teacher, thresh5 gains on Cardiomegaly (+0.0175), Atelectasis (+0.0090) and Pleural Effusion (+0.0030) but loses on Consolidation (−0.0184), so its mean gain is small.
+- *Caveat:* the gains are within the epoch-to-epoch swing of the reported run (0.873–0.900), and the epochs were picked on the test set. They suggest confident pseudo-labels help a little; they do not prove it.
+
+Original logs in [`run_logs/self_training/`](run_logs/self_training):
+
+| Log | What it shows |
+|---|---|
+| `swin_predict_teacher_39019568.out` | Soft pseudo-label generation (`teacher_predict.py`, thresholding off) |
+| `swin_predict_teacher_multi_40177597.out` | Thresholded pseudo-labels for the 5 threshold pairs (`teacher_predict_multi.py`) |
+| `swin_train_student_39049336_*.out` | Soft-label student training |
+| `thresh1/` … `thresh5/` | Student training per threshold (one file per 10-epoch job) |
+| `test/swin_test_39113703.out`, `test/thresh1/` … `test/thresh5/` | Test-set AUROC of every student checkpoint |
+
 ---
 
 **Corrections to the original write-up.** Checked against the training code that produced these numbers

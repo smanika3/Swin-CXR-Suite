@@ -1,0 +1,929 @@
+=== Starting Swin Transformer GPU Testing Job ===
+Tue Nov 25 16:17:41 MST 2025
+[DEBUG] Starting multi-checkpoint AUC evaluation
+[DEBUG] Using device: cuda
+[DEBUG] Test image base: /home/smanika3/scratch/CheXpert
+[DEBUG] Test CSV: /home/smanika3/scratch/CheXpert/test_labels.csv
+[DEBUG] Evaluating 12 disease classes
+[DEBUG] Leaderboard classes: ['Atelectasis', 'Cardiomegaly', 'Consolidation', 'Edema', 'Pleural Effusion']
+[DEBUG] Loaded 668 rows from CSV.
+[DEBUG] Sample image path: /home/smanika3/scratch/CheXpert/test/patient64741/study1/view1_frontal.jpg
+[DEBUG] Test DataLoader ready. Batches: 21
+[DEBUG] Found 40 checkpoints to evaluate
+
+================================================================================
+[EPOCH 1] Evaluating checkpoint (1/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_1.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 1:
+  Enlarged Cardiomediastinum    : 0.5705
+  Cardiomegaly                  : 0.9178
+  Lung Opacity                  : 0.9233
+  Lung Lesion                   : 0.9031
+  Edema                         : 0.9134
+  Consolidation                 : 0.8621
+  Pneumonia                     : 0.7379
+  Atelectasis                   : 0.8450
+  Pneumothorax                  : 0.8784
+  Pleural Effusion              : 0.9546
+  Pleural Other                 : 0.9523
+  Fracture                      : 0.6339
+
+  Mean Leaderboard AUC          : 0.8986
+
+================================================================================
+[EPOCH 2] Evaluating checkpoint (2/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_2.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 2:
+  Enlarged Cardiomediastinum    : 0.6383
+  Cardiomegaly                  : 0.8740
+  Lung Opacity                  : 0.9129
+  Lung Lesion                   : 0.8918
+  Edema                         : 0.9190
+  Consolidation                 : 0.8576
+  Pneumonia                     : 0.7048
+  Atelectasis                   : 0.8456
+  Pneumothorax                  : 0.9682
+  Pleural Effusion              : 0.9577
+  Pleural Other                 : 0.9771
+  Fracture                      : 0.8051
+
+  Mean Leaderboard AUC          : 0.8908
+
+================================================================================
+[EPOCH 3] Evaluating checkpoint (3/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_3.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 3:
+  Enlarged Cardiomediastinum    : 0.4800
+  Cardiomegaly                  : 0.8233
+  Lung Opacity                  : 0.9039
+  Lung Lesion                   : 0.8733
+  Edema                         : 0.8979
+  Consolidation                 : 0.8897
+  Pneumonia                     : 0.7981
+  Atelectasis                   : 0.8476
+  Pneumothorax                  : 0.9729
+  Pleural Effusion              : 0.9621
+  Pleural Other                 : 0.9544
+  Fracture                      : 0.6438
+
+  Mean Leaderboard AUC          : 0.8841
+
+================================================================================
+[EPOCH 4] Evaluating checkpoint (4/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_4.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 4:
+  Enlarged Cardiomediastinum    : 0.5154
+  Cardiomegaly                  : 0.8508
+  Lung Opacity                  : 0.9179
+  Lung Lesion                   : 0.9125
+  Edema                         : 0.9067
+  Consolidation                 : 0.8697
+  Pneumonia                     : 0.7339
+  Atelectasis                   : 0.8486
+  Pneumothorax                  : 0.9792
+  Pleural Effusion              : 0.9578
+  Pleural Other                 : 0.9688
+  Fracture                      : 0.7120
+
+  Mean Leaderboard AUC          : 0.8867
+
+================================================================================
+[EPOCH 5] Evaluating checkpoint (5/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_5.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 5:
+  Enlarged Cardiomediastinum    : 0.5676
+  Cardiomegaly                  : 0.8524
+  Lung Opacity                  : 0.9013
+  Lung Lesion                   : 0.8910
+  Edema                         : 0.8990
+  Consolidation                 : 0.8704
+  Pneumonia                     : 0.7584
+  Atelectasis                   : 0.8634
+  Pneumothorax                  : 0.9939
+  Pleural Effusion              : 0.9621
+  Pleural Other                 : 0.9502
+  Fracture                      : 0.6873
+
+  Mean Leaderboard AUC          : 0.8895
+
+================================================================================
+[EPOCH 6] Evaluating checkpoint (6/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_6.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 6:
+  Enlarged Cardiomediastinum    : 0.5694
+  Cardiomegaly                  : 0.8872
+  Lung Opacity                  : 0.9208
+  Lung Lesion                   : 0.8901
+  Edema                         : 0.9171
+  Consolidation                 : 0.8803
+  Pneumonia                     : 0.7905
+  Atelectasis                   : 0.8696
+  Pneumothorax                  : 0.9757
+  Pleural Effusion              : 0.9596
+  Pleural Other                 : 0.9799
+  Fracture                      : 0.6737
+
+  Mean Leaderboard AUC          : 0.9028
+
+================================================================================
+[EPOCH 7] Evaluating checkpoint (7/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_7.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 7:
+  Enlarged Cardiomediastinum    : 0.5159
+  Cardiomegaly                  : 0.8709
+  Lung Opacity                  : 0.9031
+  Lung Lesion                   : 0.9483
+  Edema                         : 0.9080
+  Consolidation                 : 0.8824
+  Pneumonia                     : 0.7639
+  Atelectasis                   : 0.8597
+  Pneumothorax                  : 0.9959
+  Pleural Effusion              : 0.9573
+  Pleural Other                 : 0.9818
+  Fracture                      : 0.7059
+
+  Mean Leaderboard AUC          : 0.8957
+
+================================================================================
+[EPOCH 8] Evaluating checkpoint (8/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_8.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 8:
+  Enlarged Cardiomediastinum    : 0.5233
+  Cardiomegaly                  : 0.8636
+  Lung Opacity                  : 0.9042
+  Lung Lesion                   : 0.9239
+  Edema                         : 0.9053
+  Consolidation                 : 0.8644
+  Pneumonia                     : 0.7576
+  Atelectasis                   : 0.8527
+  Pneumothorax                  : 0.9888
+  Pleural Effusion              : 0.9589
+  Pleural Other                 : 0.9540
+  Fracture                      : 0.6362
+
+  Mean Leaderboard AUC          : 0.8890
+
+================================================================================
+[EPOCH 9] Evaluating checkpoint (9/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_9.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 9:
+  Enlarged Cardiomediastinum    : 0.5659
+  Cardiomegaly                  : 0.8523
+  Lung Opacity                  : 0.9167
+  Lung Lesion                   : 0.9106
+  Edema                         : 0.8938
+  Consolidation                 : 0.8750
+  Pneumonia                     : 0.7792
+  Atelectasis                   : 0.8441
+  Pneumothorax                  : 0.9859
+  Pleural Effusion              : 0.9555
+  Pleural Other                 : 0.9377
+  Fracture                      : 0.6702
+
+  Mean Leaderboard AUC          : 0.8842
+
+================================================================================
+[EPOCH 10] Evaluating checkpoint (10/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_10.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 10:
+  Enlarged Cardiomediastinum    : 0.6485
+  Cardiomegaly                  : 0.8927
+  Lung Opacity                  : 0.9060
+  Lung Lesion                   : 0.9481
+  Edema                         : 0.9093
+  Consolidation                 : 0.8841
+  Pneumonia                     : 0.7572
+  Atelectasis                   : 0.8445
+  Pneumothorax                  : 0.9948
+  Pleural Effusion              : 0.9585
+  Pleural Other                 : 0.9682
+  Fracture                      : 0.6881
+
+  Mean Leaderboard AUC          : 0.8978
+
+================================================================================
+[EPOCH 11] Evaluating checkpoint (11/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_11.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 11:
+  Enlarged Cardiomediastinum    : 0.5731
+  Cardiomegaly                  : 0.8541
+  Lung Opacity                  : 0.9200
+  Lung Lesion                   : 0.9350
+  Edema                         : 0.9131
+  Consolidation                 : 0.8292
+  Pneumonia                     : 0.7627
+  Atelectasis                   : 0.8466
+  Pneumothorax                  : 0.9968
+  Pleural Effusion              : 0.9532
+  Pleural Other                 : 0.9756
+  Fracture                      : 0.6667
+
+  Mean Leaderboard AUC          : 0.8792
+
+================================================================================
+[EPOCH 12] Evaluating checkpoint (12/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_12.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 12:
+  Enlarged Cardiomediastinum    : 0.6629
+  Cardiomegaly                  : 0.8699
+  Lung Opacity                  : 0.9206
+  Lung Lesion                   : 0.8946
+  Edema                         : 0.9096
+  Consolidation                 : 0.8860
+  Pneumonia                     : 0.7869
+  Atelectasis                   : 0.8453
+  Pneumothorax                  : 0.9988
+  Pleural Effusion              : 0.9554
+  Pleural Other                 : 0.9652
+  Fracture                      : 0.7445
+
+  Mean Leaderboard AUC          : 0.8933
+
+================================================================================
+[EPOCH 13] Evaluating checkpoint (13/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_13.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 13:
+  Enlarged Cardiomediastinum    : 0.5936
+  Cardiomegaly                  : 0.8547
+  Lung Opacity                  : 0.9290
+  Lung Lesion                   : 0.9131
+  Edema                         : 0.9147
+  Consolidation                 : 0.8849
+  Pneumonia                     : 0.7513
+  Atelectasis                   : 0.8682
+  Pneumothorax                  : 0.9942
+  Pleural Effusion              : 0.9563
+  Pleural Other                 : 0.9509
+  Fracture                      : 0.6964
+
+  Mean Leaderboard AUC          : 0.8957
+
+================================================================================
+[EPOCH 14] Evaluating checkpoint (14/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_14.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 14:
+  Enlarged Cardiomediastinum    : 0.5763
+  Cardiomegaly                  : 0.8714
+  Lung Opacity                  : 0.9126
+  Lung Lesion                   : 0.8990
+  Edema                         : 0.9048
+  Consolidation                 : 0.8560
+  Pneumonia                     : 0.7914
+  Atelectasis                   : 0.8423
+  Pneumothorax                  : 0.9980
+  Pleural Effusion              : 0.9572
+  Pleural Other                 : 0.9532
+  Fracture                      : 0.6923
+
+  Mean Leaderboard AUC          : 0.8863
+
+================================================================================
+[EPOCH 15] Evaluating checkpoint (15/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_15.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 15:
+  Enlarged Cardiomediastinum    : 0.5727
+  Cardiomegaly                  : 0.8434
+  Lung Opacity                  : 0.9037
+  Lung Lesion                   : 0.9444
+  Edema                         : 0.9021
+  Consolidation                 : 0.8769
+  Pneumonia                     : 0.6945
+  Atelectasis                   : 0.8531
+  Pneumothorax                  : 0.9942
+  Pleural Effusion              : 0.9618
+  Pleural Other                 : 0.9212
+  Fracture                      : 0.6568
+
+  Mean Leaderboard AUC          : 0.8875
+
+================================================================================
+[EPOCH 16] Evaluating checkpoint (16/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_16.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 16:
+  Enlarged Cardiomediastinum    : 0.5816
+  Cardiomegaly                  : 0.8495
+  Lung Opacity                  : 0.9213
+  Lung Lesion                   : 0.9401
+  Edema                         : 0.9149
+  Consolidation                 : 0.8946
+  Pneumonia                     : 0.7829
+  Atelectasis                   : 0.8366
+  Pneumothorax                  : 0.9777
+  Pleural Effusion              : 0.9571
+  Pleural Other                 : 0.9593
+  Fracture                      : 0.7578
+
+  Mean Leaderboard AUC          : 0.8905
+
+================================================================================
+[EPOCH 17] Evaluating checkpoint (17/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_17.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 17:
+  Enlarged Cardiomediastinum    : 0.6044
+  Cardiomegaly                  : 0.8685
+  Lung Opacity                  : 0.8944
+  Lung Lesion                   : 0.9223
+  Edema                         : 0.9021
+  Consolidation                 : 0.8335
+  Pneumonia                     : 0.7451
+  Atelectasis                   : 0.8331
+  Pneumothorax                  : 0.9757
+  Pleural Effusion              : 0.9556
+  Pleural Other                 : 0.9631
+  Fracture                      : 0.6148
+
+  Mean Leaderboard AUC          : 0.8786
+
+================================================================================
+[EPOCH 18] Evaluating checkpoint (18/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_18.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 18:
+  Enlarged Cardiomediastinum    : 0.5882
+  Cardiomegaly                  : 0.8720
+  Lung Opacity                  : 0.9259
+  Lung Lesion                   : 0.9409
+  Edema                         : 0.9076
+  Consolidation                 : 0.8796
+  Pneumonia                     : 0.8053
+  Atelectasis                   : 0.8430
+  Pneumothorax                  : 0.9821
+  Pleural Effusion              : 0.9521
+  Pleural Other                 : 0.9593
+  Fracture                      : 0.7384
+
+  Mean Leaderboard AUC          : 0.8909
+
+================================================================================
+[EPOCH 19] Evaluating checkpoint (19/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_19.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 19:
+  Enlarged Cardiomediastinum    : 0.5966
+  Cardiomegaly                  : 0.8871
+  Lung Opacity                  : 0.8938
+  Lung Lesion                   : 0.9346
+  Edema                         : 0.8995
+  Consolidation                 : 0.8697
+  Pneumonia                     : 0.7398
+  Atelectasis                   : 0.8195
+  Pneumothorax                  : 0.9904
+  Pleural Effusion              : 0.9602
+  Pleural Other                 : 0.9767
+  Fracture                      : 0.6125
+
+  Mean Leaderboard AUC          : 0.8872
+
+================================================================================
+[EPOCH 20] Evaluating checkpoint (20/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_20.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 20:
+  Enlarged Cardiomediastinum    : 0.6110
+  Cardiomegaly                  : 0.8853
+  Lung Opacity                  : 0.9122
+  Lung Lesion                   : 0.9497
+  Edema                         : 0.9011
+  Consolidation                 : 0.8532
+  Pneumonia                     : 0.7641
+  Atelectasis                   : 0.8578
+  Pneumothorax                  : 0.9947
+  Pleural Effusion              : 0.9566
+  Pleural Other                 : 0.9619
+  Fracture                      : 0.7022
+
+  Mean Leaderboard AUC          : 0.8908
+
+================================================================================
+[EPOCH 21] Evaluating checkpoint (21/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_21.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 21:
+  Enlarged Cardiomediastinum    : 0.6493
+  Cardiomegaly                  : 0.8522
+  Lung Opacity                  : 0.9033
+  Lung Lesion                   : 0.9344
+  Edema                         : 0.8956
+  Consolidation                 : 0.8376
+  Pneumonia                     : 0.7244
+  Atelectasis                   : 0.8340
+  Pneumothorax                  : 0.9734
+  Pleural Effusion              : 0.9577
+  Pleural Other                 : 0.9784
+  Fracture                      : 0.7029
+
+  Mean Leaderboard AUC          : 0.8754
+
+================================================================================
+[EPOCH 22] Evaluating checkpoint (22/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_22.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 22:
+  Enlarged Cardiomediastinum    : 0.5992
+  Cardiomegaly                  : 0.8726
+  Lung Opacity                  : 0.8881
+  Lung Lesion                   : 0.9516
+  Edema                         : 0.9000
+  Consolidation                 : 0.8687
+  Pneumonia                     : 0.7949
+  Atelectasis                   : 0.8316
+  Pneumothorax                  : 0.9924
+  Pleural Effusion              : 0.9512
+  Pleural Other                 : 0.9650
+  Fracture                      : 0.7210
+
+  Mean Leaderboard AUC          : 0.8848
+
+================================================================================
+[EPOCH 23] Evaluating checkpoint (23/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_23.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 23:
+  Enlarged Cardiomediastinum    : 0.6513
+  Cardiomegaly                  : 0.8625
+  Lung Opacity                  : 0.8845
+  Lung Lesion                   : 0.9061
+  Edema                         : 0.9072
+  Consolidation                 : 0.8645
+  Pneumonia                     : 0.7308
+  Atelectasis                   : 0.8332
+  Pneumothorax                  : 0.9681
+  Pleural Effusion              : 0.9620
+  Pleural Other                 : 0.9682
+  Fracture                      : 0.7628
+
+  Mean Leaderboard AUC          : 0.8859
+
+================================================================================
+[EPOCH 24] Evaluating checkpoint (24/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_24.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 24:
+  Enlarged Cardiomediastinum    : 0.6245
+  Cardiomegaly                  : 0.8603
+  Lung Opacity                  : 0.8941
+  Lung Lesion                   : 0.9410
+  Edema                         : 0.8979
+  Consolidation                 : 0.8472
+  Pneumonia                     : 0.7643
+  Atelectasis                   : 0.8437
+  Pneumothorax                  : 0.9983
+  Pleural Effusion              : 0.9509
+  Pleural Other                 : 0.9504
+  Fracture                      : 0.6667
+
+  Mean Leaderboard AUC          : 0.8800
+
+================================================================================
+[EPOCH 25] Evaluating checkpoint (25/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_25.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 25:
+  Enlarged Cardiomediastinum    : 0.5930
+  Cardiomegaly                  : 0.8479
+  Lung Opacity                  : 0.9001
+  Lung Lesion                   : 0.8440
+  Edema                         : 0.9028
+  Consolidation                 : 0.8863
+  Pneumonia                     : 0.7189
+  Atelectasis                   : 0.8373
+  Pneumothorax                  : 0.9669
+  Pleural Effusion              : 0.9568
+  Pleural Other                 : 0.9483
+  Fracture                      : 0.6828
+
+  Mean Leaderboard AUC          : 0.8862
+
+================================================================================
+[EPOCH 26] Evaluating checkpoint (26/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_26.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 26:
+  Enlarged Cardiomediastinum    : 0.6569
+  Cardiomegaly                  : 0.8412
+  Lung Opacity                  : 0.8915
+  Lung Lesion                   : 0.9668
+  Edema                         : 0.9045
+  Consolidation                 : 0.8502
+  Pneumonia                     : 0.7379
+  Atelectasis                   : 0.8263
+  Pneumothorax                  : 0.9922
+  Pleural Effusion              : 0.9527
+  Pleural Other                 : 0.9451
+  Fracture                      : 0.8009
+
+  Mean Leaderboard AUC          : 0.8750
+
+================================================================================
+[EPOCH 27] Evaluating checkpoint (27/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_27.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 27:
+  Enlarged Cardiomediastinum    : 0.6493
+  Cardiomegaly                  : 0.8333
+  Lung Opacity                  : 0.9132
+  Lung Lesion                   : 0.9228
+  Edema                         : 0.8905
+  Consolidation                 : 0.8510
+  Pneumonia                     : 0.7330
+  Atelectasis                   : 0.8301
+  Pneumothorax                  : 0.9932
+  Pleural Effusion              : 0.9521
+  Pleural Other                 : 0.9407
+  Fracture                      : 0.7417
+
+  Mean Leaderboard AUC          : 0.8714
+
+================================================================================
+[EPOCH 28] Evaluating checkpoint (28/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_28.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 28:
+  Enlarged Cardiomediastinum    : 0.7057
+  Cardiomegaly                  : 0.8768
+  Lung Opacity                  : 0.8913
+  Lung Lesion                   : 0.9234
+  Edema                         : 0.9017
+  Consolidation                 : 0.8633
+  Pneumonia                     : 0.7641
+  Atelectasis                   : 0.8240
+  Pneumothorax                  : 0.9871
+  Pleural Effusion              : 0.9508
+  Pleural Other                 : 0.8873
+  Fracture                      : 0.6327
+
+  Mean Leaderboard AUC          : 0.8833
+
+================================================================================
+[EPOCH 29] Evaluating checkpoint (29/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_29.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 29:
+  Enlarged Cardiomediastinum    : 0.6253
+  Cardiomegaly                  : 0.8455
+  Lung Opacity                  : 0.9091
+  Lung Lesion                   : 0.9278
+  Edema                         : 0.9075
+  Consolidation                 : 0.8894
+  Pneumonia                     : 0.7702
+  Atelectasis                   : 0.8600
+  Pneumothorax                  : 0.9948
+  Pleural Effusion              : 0.9555
+  Pleural Other                 : 0.8742
+  Fracture                      : 0.7661
+
+  Mean Leaderboard AUC          : 0.8916
+
+================================================================================
+[EPOCH 30] Evaluating checkpoint (30/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_30.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 30:
+  Enlarged Cardiomediastinum    : 0.6045
+  Cardiomegaly                  : 0.8716
+  Lung Opacity                  : 0.8920
+  Lung Lesion                   : 0.8992
+  Edema                         : 0.9094
+  Consolidation                 : 0.8552
+  Pneumonia                     : 0.7054
+  Atelectasis                   : 0.8353
+  Pneumothorax                  : 0.9907
+  Pleural Effusion              : 0.9594
+  Pleural Other                 : 0.9494
+  Fracture                      : 0.7168
+
+  Mean Leaderboard AUC          : 0.8862
+
+================================================================================
+[EPOCH 31] Evaluating checkpoint (31/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_31.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 31:
+  Enlarged Cardiomediastinum    : 0.5496
+  Cardiomegaly                  : 0.8893
+  Lung Opacity                  : 0.8806
+  Lung Lesion                   : 0.8935
+  Edema                         : 0.8922
+  Consolidation                 : 0.8827
+  Pneumonia                     : 0.7722
+  Atelectasis                   : 0.8549
+  Pneumothorax                  : 0.9685
+  Pleural Effusion              : 0.9526
+  Pleural Other                 : 0.8883
+  Fracture                      : 0.6609
+
+  Mean Leaderboard AUC          : 0.8943
+
+================================================================================
+[EPOCH 32] Evaluating checkpoint (32/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_32.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 32:
+  Enlarged Cardiomediastinum    : 0.5325
+  Cardiomegaly                  : 0.8170
+  Lung Opacity                  : 0.8954
+  Lung Lesion                   : 0.8921
+  Edema                         : 0.9082
+  Consolidation                 : 0.8472
+  Pneumonia                     : 0.7511
+  Atelectasis                   : 0.8397
+  Pneumothorax                  : 0.9698
+  Pleural Effusion              : 0.9550
+  Pleural Other                 : 0.9324
+  Fracture                      : 0.6833
+
+  Mean Leaderboard AUC          : 0.8734
+
+================================================================================
+[EPOCH 33] Evaluating checkpoint (33/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_33.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 33:
+  Enlarged Cardiomediastinum    : 0.5406
+  Cardiomegaly                  : 0.8646
+  Lung Opacity                  : 0.8721
+  Lung Lesion                   : 0.8825
+  Edema                         : 0.8972
+  Consolidation                 : 0.8398
+  Pneumonia                     : 0.7255
+  Atelectasis                   : 0.8221
+  Pneumothorax                  : 0.9623
+  Pleural Effusion              : 0.9548
+  Pleural Other                 : 0.9805
+  Fracture                      : 0.7261
+
+  Mean Leaderboard AUC          : 0.8757
+
+================================================================================
+[EPOCH 34] Evaluating checkpoint (34/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_34.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 34:
+  Enlarged Cardiomediastinum    : 0.5889
+  Cardiomegaly                  : 0.8462
+  Lung Opacity                  : 0.8886
+  Lung Lesion                   : 0.8722
+  Edema                         : 0.9022
+  Consolidation                 : 0.8586
+  Pneumonia                     : 0.7632
+  Atelectasis                   : 0.8481
+  Pneumothorax                  : 0.9286
+  Pleural Effusion              : 0.9563
+  Pleural Other                 : 0.8970
+  Fracture                      : 0.7299
+
+  Mean Leaderboard AUC          : 0.8823
+
+================================================================================
+[EPOCH 35] Evaluating checkpoint (35/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_35.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 35:
+  Enlarged Cardiomediastinum    : 0.5745
+  Cardiomegaly                  : 0.8586
+  Lung Opacity                  : 0.9047
+  Lung Lesion                   : 0.8628
+  Edema                         : 0.8956
+  Consolidation                 : 0.8482
+  Pneumonia                     : 0.7355
+  Atelectasis                   : 0.8463
+  Pneumothorax                  : 0.9196
+  Pleural Effusion              : 0.9467
+  Pleural Other                 : 0.8915
+  Fracture                      : 0.7205
+
+  Mean Leaderboard AUC          : 0.8791
+
+================================================================================
+[EPOCH 36] Evaluating checkpoint (36/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_36.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 36:
+  Enlarged Cardiomediastinum    : 0.6064
+  Cardiomegaly                  : 0.8477
+  Lung Opacity                  : 0.8710
+  Lung Lesion                   : 0.9232
+  Edema                         : 0.8910
+  Consolidation                 : 0.8457
+  Pneumonia                     : 0.6954
+  Atelectasis                   : 0.8066
+  Pneumothorax                  : 0.9771
+  Pleural Effusion              : 0.9485
+  Pleural Other                 : 0.9375
+  Fracture                      : 0.6201
+
+  Mean Leaderboard AUC          : 0.8679
+
+================================================================================
+[EPOCH 37] Evaluating checkpoint (37/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_37.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 37:
+  Enlarged Cardiomediastinum    : 0.5630
+  Cardiomegaly                  : 0.8269
+  Lung Opacity                  : 0.8916
+  Lung Lesion                   : 0.8751
+  Edema                         : 0.8835
+  Consolidation                 : 0.8533
+  Pneumonia                     : 0.7256
+  Atelectasis                   : 0.8247
+  Pneumothorax                  : 0.9796
+  Pleural Effusion              : 0.9465
+  Pleural Other                 : 0.8795
+  Fracture                      : 0.7968
+
+  Mean Leaderboard AUC          : 0.8670
+
+================================================================================
+[EPOCH 38] Evaluating checkpoint (38/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_38.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 38:
+  Enlarged Cardiomediastinum    : 0.6393
+  Cardiomegaly                  : 0.8355
+  Lung Opacity                  : 0.8930
+  Lung Lesion                   : 0.8532
+  Edema                         : 0.8965
+  Consolidation                 : 0.8603
+  Pneumonia                     : 0.7442
+  Atelectasis                   : 0.8342
+  Pneumothorax                  : 0.9889
+  Pleural Effusion              : 0.9576
+  Pleural Other                 : 0.9500
+  Fracture                      : 0.6969
+
+  Mean Leaderboard AUC          : 0.8768
+
+================================================================================
+[EPOCH 39] Evaluating checkpoint (39/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_39.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 39:
+  Enlarged Cardiomediastinum    : 0.5548
+  Cardiomegaly                  : 0.8479
+  Lung Opacity                  : 0.8734
+  Lung Lesion                   : 0.8856
+  Edema                         : 0.8856
+  Consolidation                 : 0.8329
+  Pneumonia                     : 0.7165
+  Atelectasis                   : 0.8355
+  Pneumothorax                  : 0.9769
+  Pleural Effusion              : 0.9458
+  Pleural Other                 : 0.9282
+  Fracture                      : 0.7090
+
+  Mean Leaderboard AUC          : 0.8695
+
+================================================================================
+[EPOCH 40] Evaluating checkpoint (40/40)
+Checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/thresh5/checkpoint_epoch_40.pth
+================================================================================
+[DEBUG] Predictions shape: (668, 14)
+
+[RESULTS] AUROC scores for epoch 40:
+  Enlarged Cardiomediastinum    : 0.6132
+  Cardiomegaly                  : 0.8296
+  Lung Opacity                  : 0.8745
+  Lung Lesion                   : 0.9061
+  Edema                         : 0.8824
+  Consolidation                 : 0.8320
+  Pneumonia                     : 0.6598
+  Atelectasis                   : 0.8363
+  Pneumothorax                  : 0.9649
+  Pleural Effusion              : 0.9453
+  Pleural Other                 : 0.9019
+  Fracture                      : 0.6551
+
+  Mean Leaderboard AUC          : 0.8651
+
+[INFO] Exporting results to CSV: /scratch/smanika3/feedback/v2-self/plots/thresh5/auroc_results_per_epoch.csv
+[INFO] ✓ CSV exported successfully
+
+[INFO] Creating plots...
+[INFO] Creating leaderboard plot...
+[INFO] ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/leaderboard_auroc.png
+[INFO] Creating individual plots for 12 classes...
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/enlarged_cardiomediastinum_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/cardiomegaly_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/lung_opacity_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/lung_lesion_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/edema_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/consolidation_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/pneumonia_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/atelectasis_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/pneumothorax_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/pleural_effusion_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/pleural_other_auroc.png
+[INFO]   ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/fracture_auroc.png
+[INFO] Creating combined plot for all evaluation classes...
+[INFO] ✓ Saved: /scratch/smanika3/feedback/v2-self/plots/thresh5/all_classes_auroc.png
+
+================================================================================
+[SUMMARY]
+================================================================================
+Total epochs evaluated: 40
+Results CSV: /scratch/smanika3/feedback/v2-self/plots/thresh5/auroc_results_per_epoch.csv
+Plots directory: /scratch/smanika3/feedback/v2-self/plots/thresh5/
+  - Leaderboard plot: leaderboard_auroc.png
+  - Combined plot: all_classes_auroc.png
+  - Individual plots: 12 files
+
+[INFO] ✓ Evaluation complete!
+================================================================================
+=== GPU Testing Job Finished ===
+Tue Nov 25 16:23:10 MST 2025

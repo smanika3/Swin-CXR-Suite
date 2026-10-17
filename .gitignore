@@ -32,3 +32,4 @@ Thumbs.db
 .vscode/
 .idea/
 !results/**/*.png
+!**/results/**/*.png

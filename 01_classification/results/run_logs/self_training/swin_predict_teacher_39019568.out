@@ -1,0 +1,293 @@
+=== Starting Swin Transformer GPU Training Job (Array Task ) ===
+Wed Nov 12 18:09:44 MST 2025
+[DEBUG] All imports successful
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Per-class best epochs:
+  Enlarged Cardiomediastinum: epoch 1
+  Cardiomegaly: epoch 10
+  Lung Opacity: epoch 8
+  Lung Lesion: epoch 10
+  Edema: epoch 10
+  Consolidation: epoch 5
+  Pneumonia: epoch 2
+  Atelectasis: epoch 11
+  Pneumothorax: epoch 12
+  Pleural Effusion: epoch 10
+  Pleural Other: epoch 2
+  Fracture: epoch 13
+
+[DEBUG] Checkpoint grouping (OPTIMIZATION):
+  Epoch 1: 1 classes - Enlarged Cardiomediastinum
+  Epoch 2: 2 classes - Pneumonia, Pleural Other
+  Epoch 5: 1 classes - Consolidation
+  Epoch 8: 1 classes - Lung Opacity
+  Epoch 10: 4 classes - Cardiomegaly, Lung Lesion, Edema, Pleural Effusion
+  Epoch 11: 1 classes - Atelectasis
+  Epoch 12: 1 classes - Pneumothorax
+  Epoch 13: 1 classes - Fracture
+
+[DEBUG] Using THRESHOLDING: False
+
+[DEBUG] Loading original train.csv...
+[DEBUG] Original train.csv: 223414 samples, 14 classes
+
+[DEBUG] Starting grouped checkpoint predictions...
+
+================================================================================
+[CHECKPOINT 1/8] Epoch 1
+[INFO] Classes to process: ['Enlarged Cardiomediastinum']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_1.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 12403 / 223414 samples have -1 for ['Enlarged Cardiomediastinum']
+[DEBUG] DataLoader created: 130 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/130 processed
+[DEBUG] Batch 51/130 processed
+[DEBUG] Batch 101/130 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Enlarged Cardiomediastinum: predictions extracted
+
+================================================================================
+[CHECKPOINT 2/8] Epoch 2
+[INFO] Classes to process: ['Pneumonia', 'Pleural Other']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_2.pth
+[INFO] ✓ Model loaded successfully (reused for 2 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 21224 / 223414 samples have -1 for ['Pneumonia', 'Pleural Other']
+[DEBUG] DataLoader created: 222 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/222 processed
+[DEBUG] Batch 51/222 processed
+[DEBUG] Batch 101/222 processed
+[DEBUG] Batch 151/222 processed
+[DEBUG] Batch 201/222 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Pneumonia: predictions extracted
+  ✓ Pleural Other: predictions extracted
+
+================================================================================
+[CHECKPOINT 3/8] Epoch 5
+[INFO] Classes to process: ['Consolidation']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_5.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 27742 / 223414 samples have -1 for ['Consolidation']
+[DEBUG] DataLoader created: 289 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/289 processed
+[DEBUG] Batch 51/289 processed
+[DEBUG] Batch 101/289 processed
+[DEBUG] Batch 151/289 processed
+[DEBUG] Batch 201/289 processed
+[DEBUG] Batch 251/289 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Consolidation: predictions extracted
+
+================================================================================
+[CHECKPOINT 4/8] Epoch 8
+[INFO] Classes to process: ['Lung Opacity']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_8.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 5598 / 223414 samples have -1 for ['Lung Opacity']
+[DEBUG] DataLoader created: 59 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/59 processed
+[DEBUG] Batch 51/59 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Lung Opacity: predictions extracted
+
+================================================================================
+[CHECKPOINT 5/8] Epoch 10
+[INFO] Classes to process: ['Cardiomegaly', 'Lung Lesion', 'Edema', 'Pleural Effusion']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_10.pth
+[INFO] ✓ Model loaded successfully (reused for 4 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 31675 / 223414 samples have -1 for ['Cardiomegaly', 'Lung Lesion', 'Edema', 'Pleural Effusion']
+[DEBUG] DataLoader created: 330 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/330 processed
+[DEBUG] Batch 51/330 processed
+[DEBUG] Batch 101/330 processed
+[DEBUG] Batch 151/330 processed
+[DEBUG] Batch 201/330 processed
+[DEBUG] Batch 251/330 processed
+[DEBUG] Batch 301/330 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Cardiomegaly: predictions extracted
+  ✓ Lung Lesion: predictions extracted
+  ✓ Edema: predictions extracted
+  ✓ Pleural Effusion: predictions extracted
+
+================================================================================
+[CHECKPOINT 6/8] Epoch 11
+[INFO] Classes to process: ['Atelectasis']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_11.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 33739 / 223414 samples have -1 for ['Atelectasis']
+[DEBUG] DataLoader created: 352 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/352 processed
+[DEBUG] Batch 51/352 processed
+[DEBUG] Batch 101/352 processed
+[DEBUG] Batch 151/352 processed
+[DEBUG] Batch 201/352 processed
+[DEBUG] Batch 251/352 processed
+[DEBUG] Batch 301/352 processed
+[DEBUG] Batch 351/352 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Atelectasis: predictions extracted
+
+================================================================================
+[CHECKPOINT 7/8] Epoch 12
+[INFO] Classes to process: ['Pneumothorax']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_12.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 3145 / 223414 samples have -1 for ['Pneumothorax']
+[DEBUG] DataLoader created: 33 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/33 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Pneumothorax: predictions extracted
+
+================================================================================
+[CHECKPOINT 8/8] Epoch 13
+[INFO] Classes to process: ['Fracture']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_13.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 642 / 223414 samples have -1 for ['Fracture']
+[DEBUG] DataLoader created: 7 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/7 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Fracture: predictions extracted
+
+================================================================================
+[INFO] Creating pseudo-labeled training CSV...
+================================================================================
+
+[INFO] Saving pseudo-labeled CSV to: /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels.csv
+[INFO] ✓ CSV saved successfully
+
+================================================================================
+[SUMMARY] Pseudo-Label Statistics
+================================================================================
+
+Enlarged Cardiomediastinum:
+  Total replaced: 12403
+  Soft labels:     12403 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Cardiomegaly:
+  Total replaced: 8087
+  Soft labels:      8087 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Lung Opacity:
+  Total replaced: 5598
+  Soft labels:      5598 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Lung Lesion:
+  Total replaced: 1488
+  Soft labels:      1488 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Edema:
+  Total replaced: 12984
+  Soft labels:     12984 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Consolidation:
+  Total replaced: 27742
+  Soft labels:     27742 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Pneumonia:
+  Total replaced: 18770
+  Soft labels:     18770 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Atelectasis:
+  Total replaced: 33739
+  Soft labels:     33739 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Pneumothorax:
+  Total replaced: 3145
+  Soft labels:      3145 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Pleural Effusion:
+  Total replaced: 11628
+  Soft labels:     11628 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Pleural Other:
+  Total replaced: 2653
+  Soft labels:      2653 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+Fracture:
+  Total replaced: 642
+  Soft labels:       642 (100.0%)
+  Hard 1s:             0 (  0.0%)
+  Hard 0s:             0 (  0.0%)
+
+================================================================================
+GRAND TOTAL replaced: 138879 uncertain labels
+Original CSV uncertain count: 138879
+New CSV uncertain count: 0
+================================================================================
+
+[INFO] ✓ Processing complete at 2025-11-12 19:12:43
+[INFO] Next step: Use /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels.csv for student training!
+=== GPU Training Job Finished (Array Task ) ===
+Wed Nov 12 19:12:47 MST 2025

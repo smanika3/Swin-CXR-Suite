@@ -32,9 +32,25 @@ Faster R-CNN, Swin-B + FPN, 512×512, AdamW (lr 1e-4), batch 8, 16 epochs, custo
 
 Active TB is detected well; Latent TB (73 training images) stays weak.
 
+### Prediction examples (epoch 11, test set)
+
+Ground truth on the left and predictions (confidence > 0.5) on the right; red = Active TB, blue = Latent TB.
+
 <p align="center">
-  <img src="results/figures/exp2_froc_curve_epoch11.jpg" width="48%" alt="FROC curve at epoch 11" />
-  <img src="results/figures/exp2_ap50_vs_epoch.jpg" width="48%" alt="AP50 per epoch" />
+  <img src="results/predictions/best_Active_TB_2_img1845_f11.000_e11.png" width="49%" alt="Both active TB lesions detected" />
+  <img src="results/predictions/best_Mixed_TB_1_img587_f10.667_e11.png" width="49%" alt="Mixed TB: active lesion found, latent missed" />
+</p>
+
+- **Left:** both Active TB lesions found (confidence 0.95 and 0.68), F1 1.0.
+- **Right:** a Mixed TB image. The active lesion is found, but the latent one is missed.
+
+Five more examples with descriptions, including failure cases (boxes too small, latent lesions labelled as active), and FROC curves for every epoch: [`results/README.md`](results/README.md#210-prediction-examples-epoch-11).
+
+The exact scripts that produced these numbers are in [`original_run/`](original_run). Their SLURM training and test logs, and the metrics for all 16 epochs, are in [`results/run_logs/`](results/run_logs) and [`results/README.md`](results/README.md#28-run-logs-and-every-epochs-metrics).
+
+<p align="center">
+  <img src="results/figures/exp2_froc_curve_epoch11_original.png" width="48%" alt="FROC curve at epoch 11" />
+  <img src="results/figures/exp2_ap50_vs_epoch_original.png" width="48%" alt="AP50 per epoch" />
 </p>
 
 Loss, AP75, FROC-per-epoch, leaderboard reference and slides: [`results/README.md`](results/README.md).
@@ -85,12 +101,16 @@ Input CXR (512 x 512)
 │   ├── dataset.py            # Tabular TBX11K Dataset & collation
 │   ├── split_dataset.py      # Stratified 4-category split generator
 │   └── analyze_dataset.py    # Split and bounding-box distribution auditor
+├── original_run/             # Exact scripts of the reported run (hardcoded ASU Sol paths)
+│   ├── train.py / train.sh   # Training
+│   ├── test.py / test.sh     # Scores every checkpoint: per-epoch CSV, AP/FROC plots
+│   └── min_max_predict.py/.sh  # Best/worst test images per category
 ├── scripts/
 │   └── train_slurm.sh        # SLURM script (ASU Sol-specific)
 ├── train.py                  # Training pipeline with checkpoint resumption
 ├── evaluate.py               # AP50, AP75, class-specific & class-agnostic eval
 ├── visualize.py              # Side-by-side Ground Truth vs Prediction visualizer
-├── results/                  # Reported tables, figures and slides
+├── results/                  # Reported tables, figures, slides and original run logs
 ├── requirements.txt
 └── README.md
 ```

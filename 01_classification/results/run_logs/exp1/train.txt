@@ -1,0 +1,71 @@
+=== Starting Swin Transformer GPU Training Job (Array Task 1) ===
+Sun Nov  9 16:43:31 MST 2025
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Train dataset size: 223414
+[DEBUG] Validation dataset size: 234
+[INFO] Only one GPU found
+[INFO] No checkpoint found, starting from scratch
+[INFO] Training from epoch 1 to 100
+[INFO] Epoch 1 completed. Avg Loss: 0.5016
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_1.pth at 2025-11-09 18:17:48
+[INFO] Epoch 1 validation loss: 0.3822
+[INFO] Epoch 2 completed. Avg Loss: 0.4928
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_2.pth at 2025-11-09 19:42:15
+[INFO] Epoch 2 validation loss: 0.3757
+[INFO] Epoch 3 completed. Avg Loss: 0.4899
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_3.pth at 2025-11-09 21:11:13
+[INFO] Epoch 3 validation loss: 0.3756
+[INFO] Epoch 4 completed. Avg Loss: 0.4881
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_4.pth at 2025-11-09 22:46:12
+[INFO] Epoch 4 validation loss: 0.3817
+[INFO] Epoch 5 completed. Avg Loss: 0.4868
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_5.pth at 2025-11-10 00:36:36
+[INFO] Epoch 5 validation loss: 0.3816
+[INFO] Epoch 6 completed. Avg Loss: 0.4856
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_6.pth at 2025-11-10 02:09:55
+[INFO] Epoch 6 validation loss: 0.3750
+[INFO] Epoch 7 completed. Avg Loss: 0.4849
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_7.pth at 2025-11-10 03:44:09
+[INFO] Epoch 7 validation loss: 0.3742
+[INFO] Epoch 8 completed. Avg Loss: 0.4840
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_8.pth at 2025-11-10 05:27:01
+[INFO] Epoch 8 validation loss: 0.3718
+[INFO] Epoch 9 completed. Avg Loss: 0.4835
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_9.pth at 2025-11-10 07:15:07
+[INFO] Epoch 9 validation loss: 0.3727
+=== Starting Swin Transformer GPU Training Job (Array Task 2) ===
+Mon Nov 10 08:44:24 MST 2025
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Train dataset size: 223414
+[DEBUG] Validation dataset size: 234
+[INFO] Only one GPU found
+[INFO] Resuming from checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_9.pth
+[INFO] Training from epoch 10 to 100
+[INFO] Epoch 10 completed. Avg Loss: 0.4834
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_10.pth at 2025-11-10 10:25:42
+[INFO] Epoch 10 validation loss: 0.3715
+[INFO] Epoch 11 completed. Avg Loss: 0.4826
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_11.pth at 2025-11-10 12:06:52
+[INFO] Epoch 11 validation loss: 0.3790
+[INFO] Epoch 12 completed. Avg Loss: 0.4826
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_12.pth at 2025-11-10 13:40:52
+[INFO] Epoch 12 validation loss: 0.3695
+[INFO] Epoch 13 completed. Avg Loss: 0.4812
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_13.pth at 2025-11-10 15:18:24
+[INFO] Epoch 13 validation loss: 0.3698
+[INFO] Epoch 14 completed. Avg Loss: 0.4815
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_14.pth at 2025-11-10 16:51:16
+[INFO] Epoch 14 validation loss: 0.3660
+[INFO] Epoch 15 completed. Avg Loss: 0.4806
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_15.pth at 2025-11-10 18:22:38
+[INFO] Epoch 15 validation loss: 0.3654
+[INFO] Epoch 16 completed. Avg Loss: 0.4803
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_16.pth at 2025-11-10 20:01:57
+[INFO] Epoch 16 validation loss: 0.3676
+[INFO] Epoch 17 completed. Avg Loss: 0.4796
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_17.pth at 2025-11-10 21:40:21
+[INFO] Epoch 17 validation loss: 0.3822
+[INFO] Epoch 18 completed. Avg Loss: 0.4794
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_18.pth at 2025-11-10 23:14:44
+[INFO] Epoch 18 validation loss: 0.3842
+

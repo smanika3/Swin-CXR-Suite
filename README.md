@@ -75,6 +75,7 @@ The repository is modularized into dedicated sub-projects, each with its own sel
 **Key findings**
 - **Beats the CheXpert paper baseline:** mean AUC 0.9004 vs 0.8892 for the paper's U-Ignore model (+0.011), higher on 3 of 5 pathologies. Our run used U-Ignore for 12 of 14 classes (U-Ones for Cardiomegaly, U-Zeros for Pleural Effusion).
 - **Peak AUC came early:** best epoch was epoch 2; later epochs stayed between about 0.873 and 0.892.
+- **Self-training as another approach (supplementary):** students trained on the reported model's pseudo-labels for the ~139k uncertain labels reached up to 0.9028 mean AUC (confidence thresholds 0.9 / 0.1). That is a small gain over 0.9004, also picked on the test set ([details](./01_classification/README.md#another-approach-teacherstudent-self-training)).
 - **Strong Active TB detection:** AP50 0.6241 (category-agnostic 0.6622), above the TBX11K leaderboard reference row (Active 62.41 vs 54.76 %, agnostic 66.22 vs 61.74 %); indicative only, custom split.
 - **Latent TB is the open problem:** AP50 between 0.004 and 0.18 across epochs, with only 73 training images vs 332 for Active TB.
 - **Near-perfect organ masks:** Dice 0.9616 right lung, 0.9512 left lung, 0.9494 heart. Mean Dice rose every epoch of the 11-epoch run.
@@ -82,6 +83,8 @@ The repository is modularized into dedicated sub-projects, each with its own sel
 
 Every curve, per-epoch table (also as CSV), slide and qualitative case is in each module's `results/` folder:
 [`01_classification/results`](./01_classification/results/README.md) · [`02_detection/results`](./02_detection/results/README.md) · [`03_segmentation/results`](./03_segmentation/results/README.md)
+
+The original SLURM training and test logs behind the CheXpert and TBX11K numbers are included under `results/run_logs/`. The exact scripts of each reported run are in `01_classification/exp1_policy_training/`, `02_detection/original_run/` and `03_segmentation/original_run/`.
 
 ---
 
@@ -97,9 +100,11 @@ Every curve, per-epoch table (also as CSV), slide and qualitative case is in eac
 <sub>Row 1: Swin-B, epoch 2, test set (best epoch chosen on test AUC). Row 2 (italic): CheXpert paper U-Ignore, validation set, so the comparison is indicative only.</sub>
 
 <p align="center">
-  <img src="01_classification/results/figures/exp1_auroc_per_epoch.jpg" width="49%" alt="Per-class AUROC per epoch" />
+  <img src="01_classification/results/figures/exp1_leaderboard_auroc_original.png" width="49%" alt="Per-class AUROC per epoch" />
   <img src="01_classification/results/figures/exp1_loss_curve.jpg" width="49%" alt="CheXpert training and validation loss" />
 </p>
+
+<sub>Supplementary self-training: the best student reached 0.9028 mean AUC ([chart and details](./01_classification/README.md#another-approach-teacherstudent-self-training)).</sub>
 
 ### 2. TBX11K Tuberculosis Lesion Detection ([full results](./02_detection/results/README.md))
 
@@ -110,13 +115,22 @@ Every curve, per-epoch table (also as CSV), slide and qualitative case is in eac
 | 15 (best AP75) | 0.6332 | 0.6016 | 0.1249 | **0.1905** | **0.1754** | **0.0367** | 0.5817 |
 
 <p align="center">
-  <img src="02_detection/results/figures/exp2_froc_curve_epoch11.jpg" width="49%" alt="FROC curve at epoch 11" />
-  <img src="02_detection/results/figures/exp2_froc_vs_epoch.jpg" width="49%" alt="FROC score per epoch" />
+  <img src="02_detection/results/figures/exp2_froc_curve_epoch11_original.png" width="49%" alt="FROC curve at epoch 11" />
+  <img src="02_detection/results/figures/exp2_froc_vs_epoch_original.png" width="49%" alt="FROC score per epoch" />
 </p>
 <p align="center">
-  <img src="02_detection/results/figures/exp2_ap50_vs_epoch.jpg" width="49%" alt="AP50 per epoch" />
-  <img src="02_detection/results/figures/exp2_ap75_vs_epoch.jpg" width="49%" alt="AP75 per epoch" />
+  <img src="02_detection/results/figures/exp2_ap50_vs_epoch_original.png" width="49%" alt="AP50 per epoch" />
+  <img src="02_detection/results/figures/exp2_ap75_vs_epoch_original.png" width="49%" alt="AP75 per epoch" />
 </p>
+
+**Test-set predictions at epoch 11** (ground truth left, prediction right; red = Active TB, blue = Latent TB):
+
+<p align="center">
+  <img src="02_detection/results/predictions/best_Active_TB_2_img1845_f11.000_e11.png" width="49%" alt="Both active TB lesions detected" />
+  <img src="02_detection/results/predictions/worst_Latent_TB_2_img83_f10.000_e11.png" width="49%" alt="Latent lesions located but labelled active" />
+</p>
+
+<sub>Left: both Active TB lesions found (0.95, 0.68). Right: both Latent TB lesions are located correctly but labelled Active TB. That is the typical Latent TB error behind its low per-class AP. More examples: [prediction gallery](./02_detection/results/README.md#210-prediction-examples-epoch-11).</sub>
 
 ### 3. CheXmask Lung & Heart Segmentation ([full results](./03_segmentation/results/README.md))
 
@@ -201,12 +215,12 @@ Swin-CXR-Suite/
 │
 ├── 01_classification/             # CheXpert multi-label Vision Transformer
 │   ├── exp1_policy_training/      # Reported run: per-class policy training + per-epoch test evaluation
-│   ├── self_training/             # Teacher-Student pseudo-labeling distillation
+│   ├── self_training/             # Teacher-Student pseudo-labeling (supplementary results)
 │   ├── train_baseline.py          # Plain supervised Swin-B baseline (CLI)
 │   ├── train_uncertainty.py       # Per-class uncertainty policy mapping (CLI)
 │   ├── finetune_libauc.py         # LibAUC AUROC fine-tuning (does not run as written)
 │   ├── evaluate.py                # AUROC of one checkpoint on valid.csv
-│   └── results/                   # CheXpert figures, slides, CSV tables
+│   └── results/                   # CheXpert figures, slides, CSV tables, run logs
 │
 ├── 02_detection/                  # TBX11K Swin-FPN Faster R-CNN detection
 │   ├── models/                    # SwinBackboneWithFPN & Faster R-CNN
@@ -214,7 +228,8 @@ Swin-CXR-Suite/
 │   ├── train.py                   # AdamW training loop
 │   ├── evaluate.py                # Class-specific / class-agnostic AP and FROC
 │   ├── visualize.py               # Ground Truth vs Prediction visualizer
-│   └── results/                   # TBX11K figures, slides, CSV tables
+│   ├── original_run/              # Exact scripts of the reported run
+│   └── results/                   # TBX11K figures, slides, CSV tables, run logs
 │
 ├── 03_segmentation/               # CheXmask multi-organ semantic segmentation
 │   ├── models/                    # Swin-Unet-V2 architecture definitions
@@ -222,6 +237,7 @@ Swin-CXR-Suite/
 │   ├── analysis/                  # Failure mode and worst-case auditor
 │   ├── train.py                   # CrossEntropy training loop, Dice metric
 │   ├── evaluate.py                # Organ-wise Dice score evaluation
+│   ├── original_run/              # Exact scripts of the reported run
 │   └── results/                   # CheXmask figures, slides, CSV tables
 │
 └── LICENSE                        # MIT

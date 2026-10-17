@@ -1,0 +1,63 @@
+=== Starting Swin Transformer GPU Training Job (Array Task 2) ===
+Thu Nov 13 07:36:06 MST 2025
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Train dataset size: 223414
+[DEBUG] Validation dataset size: 234
+[DEBUG] DataLoaders created with persistent_workers=True
+[INFO] Only one GPU found
+[INFO] Resuming from checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_10.pth
+[INFO] Training from epoch 11 to 20
+[INFO] Epoch 11 completed. Avg Train Loss: 0.4876
+[INFO] Epoch 11 validation loss: 0.3699
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_11.pth
+        Train Loss: 0.4876, Val Loss: 0.3699
+        Saved at 2025-11-13 08:03:15
+
+[INFO] Epoch 12 completed. Avg Train Loss: 0.4875
+[INFO] Epoch 12 validation loss: 0.3689
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_12.pth
+        Train Loss: 0.4875, Val Loss: 0.3689
+        Saved at 2025-11-13 08:29:44
+
+[INFO] Epoch 13 completed. Avg Train Loss: 0.4870
+[INFO] Epoch 13 validation loss: 0.3692
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_13.pth
+        Train Loss: 0.4870, Val Loss: 0.3692
+        Saved at 2025-11-13 08:56:19
+
+[INFO] Epoch 14 completed. Avg Train Loss: 0.4867
+[INFO] Epoch 14 validation loss: 0.3726
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_14.pth
+        Train Loss: 0.4867, Val Loss: 0.3726
+        Saved at 2025-11-13 09:27:51
+
+[INFO] Epoch 15 completed. Avg Train Loss: 0.4859
+[INFO] Epoch 15 validation loss: 0.3744
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_15.pth
+        Train Loss: 0.4859, Val Loss: 0.3744
+        Saved at 2025-11-13 09:59:08
+
+[INFO] Epoch 16 completed. Avg Train Loss: 0.4854
+[INFO] Epoch 16 validation loss: 0.3777
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_16.pth
+        Train Loss: 0.4854, Val Loss: 0.3777
+        Saved at 2025-11-13 10:33:59
+
+[INFO] Epoch 17 completed. Avg Train Loss: 0.4852
+[INFO] Epoch 17 validation loss: 0.3743
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_17.pth
+        Train Loss: 0.4852, Val Loss: 0.3743
+        Saved at 2025-11-13 11:08:00
+
+[INFO] Epoch 18 completed. Avg Train Loss: 0.4850
+[INFO] Epoch 18 validation loss: 0.3666
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_18.pth
+        Train Loss: 0.4850, Val Loss: 0.3666
+        Saved at 2025-11-13 11:48:49
+
+[INFO] Epoch 19 completed. Avg Train Loss: 0.4844
+[INFO] Epoch 19 validation loss: 0.3681
+[INFO] Saved checkpoint: /scratch/smanika3/feedback/v2-self/checkpoints/student/checkpoint_epoch_19.pth
+        Train Loss: 0.4844, Val Loss: 0.3681
+        Saved at 2025-11-13 12:29:08
+

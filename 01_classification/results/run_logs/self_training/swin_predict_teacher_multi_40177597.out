@@ -1,0 +1,281 @@
+=== Starting Swin Transformer GPU Training Job (Array Task ) ===
+Sat Nov 22 23:35:14 MST 2025
+[DEBUG] All imports successful
+[DEBUG] CUDA available: True, DEVICE: cuda
+[DEBUG] Per-class best epochs:
+  Enlarged Cardiomediastinum: epoch 1
+  Cardiomegaly: epoch 10
+  Lung Opacity: epoch 8
+  Lung Lesion: epoch 10
+  Edema: epoch 10
+  Consolidation: epoch 5
+  Pneumonia: epoch 2
+  Atelectasis: epoch 11
+  Pneumothorax: epoch 12
+  Pleural Effusion: epoch 10
+  Pleural Other: epoch 2
+  Fracture: epoch 13
+
+[DEBUG] Multi-threshold experiment with 5 configurations:
+  HIGH=0.5, LOW=0.5
+  HIGH=0.6, LOW=0.4
+  HIGH=0.7, LOW=0.3
+  HIGH=0.8, LOW=0.2
+  HIGH=0.9, LOW=0.1
+
+[DEBUG] Checkpoint grouping (OPTIMIZATION):
+  Epoch 1: 1 classes - Enlarged Cardiomediastinum
+  Epoch 2: 2 classes - Pneumonia, Pleural Other
+  Epoch 5: 1 classes - Consolidation
+  Epoch 8: 1 classes - Lung Opacity
+  Epoch 10: 4 classes - Cardiomegaly, Lung Lesion, Edema, Pleural Effusion
+  Epoch 11: 1 classes - Atelectasis
+  Epoch 12: 1 classes - Pneumothorax
+  Epoch 13: 1 classes - Fracture
+
+[DEBUG] Loading original train.csv...
+[DEBUG] Original train.csv: 223414 samples, 14 classes
+
+[DEBUG] Starting grouped checkpoint predictions...
+
+================================================================================
+[CHECKPOINT 1/8] Epoch 1
+[INFO] Classes to process: ['Enlarged Cardiomediastinum']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_1.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 12403 / 223414 samples have -1 for ['Enlarged Cardiomediastinum']
+[DEBUG] DataLoader created: 130 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/130 processed
+[DEBUG] Batch 51/130 processed
+[DEBUG] Batch 101/130 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Enlarged Cardiomediastinum: predictions extracted
+
+================================================================================
+[CHECKPOINT 2/8] Epoch 2
+[INFO] Classes to process: ['Pneumonia', 'Pleural Other']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_2.pth
+[INFO] ✓ Model loaded successfully (reused for 2 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 21224 / 223414 samples have -1 for ['Pneumonia', 'Pleural Other']
+[DEBUG] DataLoader created: 222 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/222 processed
+[DEBUG] Batch 51/222 processed
+[DEBUG] Batch 101/222 processed
+[DEBUG] Batch 151/222 processed
+[DEBUG] Batch 201/222 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Pneumonia: predictions extracted
+  ✓ Pleural Other: predictions extracted
+
+================================================================================
+[CHECKPOINT 3/8] Epoch 5
+[INFO] Classes to process: ['Consolidation']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_5.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 27742 / 223414 samples have -1 for ['Consolidation']
+[DEBUG] DataLoader created: 289 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/289 processed
+[DEBUG] Batch 51/289 processed
+[DEBUG] Batch 101/289 processed
+[DEBUG] Batch 151/289 processed
+[DEBUG] Batch 201/289 processed
+[DEBUG] Batch 251/289 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Consolidation: predictions extracted
+
+================================================================================
+[CHECKPOINT 4/8] Epoch 8
+[INFO] Classes to process: ['Lung Opacity']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_8.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 5598 / 223414 samples have -1 for ['Lung Opacity']
+[DEBUG] DataLoader created: 59 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/59 processed
+[DEBUG] Batch 51/59 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Lung Opacity: predictions extracted
+
+================================================================================
+[CHECKPOINT 5/8] Epoch 10
+[INFO] Classes to process: ['Cardiomegaly', 'Lung Lesion', 'Edema', 'Pleural Effusion']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_10.pth
+[INFO] ✓ Model loaded successfully (reused for 4 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 31675 / 223414 samples have -1 for ['Cardiomegaly', 'Lung Lesion', 'Edema', 'Pleural Effusion']
+[DEBUG] DataLoader created: 330 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/330 processed
+[DEBUG] Batch 51/330 processed
+[DEBUG] Batch 101/330 processed
+[DEBUG] Batch 151/330 processed
+[DEBUG] Batch 201/330 processed
+[DEBUG] Batch 251/330 processed
+[DEBUG] Batch 301/330 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Cardiomegaly: predictions extracted
+  ✓ Lung Lesion: predictions extracted
+  ✓ Edema: predictions extracted
+  ✓ Pleural Effusion: predictions extracted
+
+================================================================================
+[CHECKPOINT 6/8] Epoch 11
+[INFO] Classes to process: ['Atelectasis']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_11.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 33739 / 223414 samples have -1 for ['Atelectasis']
+[DEBUG] DataLoader created: 352 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/352 processed
+[DEBUG] Batch 51/352 processed
+[DEBUG] Batch 101/352 processed
+[DEBUG] Batch 151/352 processed
+[DEBUG] Batch 201/352 processed
+[DEBUG] Batch 251/352 processed
+[DEBUG] Batch 301/352 processed
+[DEBUG] Batch 351/352 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Atelectasis: predictions extracted
+
+================================================================================
+[CHECKPOINT 7/8] Epoch 12
+[INFO] Classes to process: ['Pneumothorax']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_12.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 3145 / 223414 samples have -1 for ['Pneumothorax']
+[DEBUG] DataLoader created: 33 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/33 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Pneumothorax: predictions extracted
+
+================================================================================
+[CHECKPOINT 8/8] Epoch 13
+[INFO] Classes to process: ['Fracture']
+================================================================================
+[INFO] Loading checkpoint: /scratch/smanika3/feedback/v1/checkpoints/checkpoint_epoch_13.pth
+[INFO] ✓ Model loaded successfully (reused for 1 classes)
+
+[INFO] Creating filtered dataset...
+[DEBUG] Filtered dataset: 642 / 223414 samples have -1 for ['Fracture']
+[DEBUG] DataLoader created: 7 batches
+
+[INFO] Forward pass on filtered dataset...
+[DEBUG] Batch 1/7 processed
+
+[INFO] Extracting per-class soft labels...
+  ✓ Fracture: predictions extracted
+
+================================================================================
+[INFO] Generating pseudo-labeled CSVs with different thresholds...
+================================================================================
+
+[THRESHOLD] HIGH=0.5, LOW=0.5
+  Saving to: /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels_thresh_0.5_0.5.csv
+  ✓ CSV saved successfully
+
+  [STATS] Pseudo-Label Statistics for HIGH=0.5, LOW=0.5
+  ----------------------------------------------------------------------------
+  Total replaced: 138879 uncertain labels
+  Total soft: 0
+  Total hard 1s: 15121
+  Total hard 0s: 123758
+
+[THRESHOLD] HIGH=0.6, LOW=0.4
+  Saving to: /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels_thresh_0.6_0.4.csv
+  ✓ CSV saved successfully
+
+  [STATS] Pseudo-Label Statistics for HIGH=0.6, LOW=0.4
+  ----------------------------------------------------------------------------
+  Total replaced: 138879 uncertain labels
+  Total soft: 24810
+  Total hard 1s: 7088
+  Total hard 0s: 106981
+
+[THRESHOLD] HIGH=0.7, LOW=0.3
+  Saving to: /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels_thresh_0.7_0.3.csv
+  ✓ CSV saved successfully
+
+  [STATS] Pseudo-Label Statistics for HIGH=0.7, LOW=0.3
+  ----------------------------------------------------------------------------
+  Total replaced: 138879 uncertain labels
+  Total soft: 61532
+  Total hard 1s: 2041
+  Total hard 0s: 75306
+
+[THRESHOLD] HIGH=0.8, LOW=0.2
+  Saving to: /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels_thresh_0.8_0.2.csv
+  ✓ CSV saved successfully
+
+  [STATS] Pseudo-Label Statistics for HIGH=0.8, LOW=0.2
+  ----------------------------------------------------------------------------
+  Total replaced: 138879 uncertain labels
+  Total soft: 100040
+  Total hard 1s: 285
+  Total hard 0s: 38554
+
+[THRESHOLD] HIGH=0.9, LOW=0.1
+  Saving to: /scratch/smanika3/chexpert/full_uncompressed/CheXpert-v1.0 batch 1 (validate & csv)/train_pseudolabels_thresh_0.9_0.1.csv
+  ✓ CSV saved successfully
+
+  [STATS] Pseudo-Label Statistics for HIGH=0.9, LOW=0.1
+  ----------------------------------------------------------------------------
+  Total replaced: 138879 uncertain labels
+  Total soft: 134120
+  Total hard 1s: 6
+  Total hard 0s: 4753
+
+================================================================================
+[SUMMARY] Multi-Threshold Experiment Complete
+================================================================================
+Generated 5 pseudo-labeled datasets:
+  - train_pseudolabels_thresh_0.5_0.5.csv
+  - train_pseudolabels_thresh_0.6_0.4.csv
+  - train_pseudolabels_thresh_0.7_0.3.csv
+  - train_pseudolabels_thresh_0.8_0.2.csv
+  - train_pseudolabels_thresh_0.9_0.1.csv
+
+Original CSV uncertain count: 138879
+================================================================================
+
+[INFO] ✓ Processing complete at 2025-11-22 23:53:10
+[INFO] Next step: Use the generated CSVs for experimental student training!
+=== GPU Training Job Finished (Array Task ) ===
+Sat Nov 22 23:53:14 MST 2025
